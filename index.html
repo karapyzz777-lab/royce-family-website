@@ -3,282 +3,183 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ROYCE FAMILY — GTA 5 RP</title>
+  <title>Royce Family — Luxury GTA 5 RP</title>
+  <meta name="description" content="Royce Family — элитная GTA 5 RP семья с luxury атмосферой, сильным составом и премиальной подачей.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body data-page="home">
+  <div class="page-shell">
+    <header class="topbar">
+      <div class="container topbar-inner">
+        <a href="index.html" class="brand" aria-label="Royce Family home">
+          <span class="brand-mark">R</span>
+          <span class="brand-text">
+            <span class="brand-title">ROYCE FAMILY</span>
+            <span class="brand-subtitle">Luxury GTA 5 RP</span>
+          </span>
+        </a>
 
-  <div class="bg-grid"></div>
+        <button class="nav-toggle" id="navToggle" aria-label="Открыть меню" aria-expanded="false">☰</button>
 
-  <nav class="navbar" role="navigation" aria-label="Main navigation">
-    <a href="index.html" class="nav-logo">ROYCE<span>&nbsp;FAMILY</span></a>
-    <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation menu" aria-expanded="false">
-      <span></span><span></span><span></span>
-    </button>
-    <ul class="nav-links" id="navLinks" role="menubar">
-      <li role="none"><a href="index.html" class="active" role="menuitem">Главная</a></li>
-      <li role="none"><a href="#about" role="menuitem">О нас</a></li>
-      <li role="none"><a href="#partners" role="menuitem">Медиа</a></li>
-      <li role="none"><a href="apply.html" class="nav-cta" role="menuitem">Вступить</a></li>
-    </ul>
-  </nav>
+        <nav class="nav" id="mainNav">
+          <div class="nav-links">
+            <a href="index.html" class="nav-link" data-page-link="home">Главная</a>
+            <a href="about.html" class="nav-link" data-page-link="about">О семье</a>
+            <a href="media.html" class="nav-link" data-page-link="media">Медиа</a>
+            <a href="rules.html" class="nav-link" data-page-link="rules">Правила</a>
+            <a href="apply.html" class="nav-link" data-page-link="apply">Вступить</a>
+          </div>
+          <a href="apply.html" class="btn btn-primary nav-cta">Подать заявку</a>
+        </nav>
+      </div>
+    </header>
 
-  <div class="page-wrap">
-    <section class="hero">
-      <div class="hero-bg"></div>
-      <div class="hero-content">
-        <div class="hero-tag">// GTA 5 ROLEPLAY //</div>
-        <h1 class="hero-title">
-          <span class="line1">ROYCE</span>
-          <span class="line2">FAMILY</span>
-        </h1>
-        <p class="hero-sub">
-          <span class="typing-text" id="heroTyping"></span>
-          <span class="typing-cursor"></span>
-        </p>
-        <div class="hero-btns">
-          <a href="apply.html" class="btn btn-primary">Вступить в семью</a>
-          <a href="#about" class="btn btn-outline">Узнать больше</a>
+    <main>
+      <section class="hero">
+        <div class="container hero-grid">
+          <div class="hero-copy reveal">
+            <div class="kicker">Royce Family / Los Santos</div>
+            <h1>Стиль. Влияние. <span>Семья.</span></h1>
+            <p>
+              Royce Family — не просто состав игроков. Это luxury-объединение в GTA 5 RP, где ценят дисциплину, визуальный стиль, сильную ролевую игру и влияние на улицах Los Santos.
+            </p>
+            <div class="hero-actions">
+              <a href="apply.html" class="btn btn-primary">Вступить в семью</a>
+              <a href="about.html" class="btn btn-secondary">Посмотреть концепт семьи</a>
+              <a href="rules.html" class="btn btn-ghost">Прочитать правила</a>
+            </div>
+            <div class="hero-pills">
+              <span class="pill">⚜️ Premium подача</span>
+              <span class="pill">🏙️ Атмосфера Los Santos</span>
+              <span class="pill">🎭 Настоящий RP-контент</span>
+            </div>
+          </div>
+
+          <div class="hero-visual reveal">
+            <div class="hero-overlay">
+              <div class="lux-card">
+                <h3>Royce Vision</h3>
+                <p>Тёмный luxury-стиль, дорогой визуал, уважение внутри состава и сильная репутация на сервере.</p>
+              </div>
+              <div class="lux-card">
+                <h3>Новый формат сайта</h3>
+                <p>Теперь структура разделена на отдельные страницы: Главная, О семье, Медиа и Вступление — без бесконечного скролла.</p>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-      <div class="hero-city"></div>
-    </section>
 
-    <div class="section-divider" style="margin-top:4rem"></div>
-    
-    <section class="section" id="about">
-      <div class="section-header reveal">
-        <span class="section-tag">// 01 — О НАС //</span>
-        <h2 class="section-title">КТО МЫ ТАКИЕ</h2>
-        <div class="section-line"></div>
-      </div>
-      <div class="reveal" style="background:#0d1117;border:1px solid rgba(0,255,159,.15);border-left:3px solid #00ff9f;padding:2rem 2.5rem;margin-bottom:2.5rem;">
-        <div style="font-family:'Share Tech Mono',monospace;font-size:.68rem;letter-spacing:4px;color:#00ff9f;margin-bottom:1rem;">// О СЕМЬЕ //</div>
-        <p style="font-size:1.08rem;line-height:1.9;color:#c8d8e4;">Мы — <span style="color:#00ff9f;font-weight:700;">семья Royce</span>. Не просто группа игроков, а настоящее братство, которое живёт по своим правилам на улицах Los Santos. Каждый, кто попадает к нам, становится частью чего-то большего — общего дела, общей истории и общей судьбы.</p>
-      </div>
-      <div class="cards-grid">
-        <div class="card reveal"><span class="card-icon">⚔️</span><div class="card-title">Война семей</div><p class="card-text">Активные участники войны семей — захват территорий и уличные разборки.</p><div class="card-corner"></div></div>
-        <div class="card reveal"><span class="card-icon">🎭</span><div class="card-title">РП Контент</div><p class="card-text">Создаём качественный ролевой контент: сходки, криминальные схемы, переговоры.</p><div class="card-corner"></div></div>
-        <div class="card reveal"><span class="card-icon">🤝</span><div class="card-title">Дружелюбный состав</div><p class="card-text">Новичкам всегда помогут разобраться. Никакого токсика — только уважение.</p><div class="card-corner"></div></div>
-        <div class="card reveal"><span class="card-icon">🏙️</span><div class="card-title">Свои территории</div><p class="card-text">Контролируем улицы, бизнес и ресурсы своей зоны в Los Santos.</p><div class="card-corner"></div></div>
-        <div class="card reveal"><span class="card-icon">📈</span><div class="card-title">Развитие персонажа</div><p class="card-text">Помогаем каждому развить персонажа и найти место в иерархии семьи.</p><div class="card-corner"></div></div>
-        <div class="card reveal"><span class="card-icon">🎙️</span><div class="card-title">Живое общение</div><p class="card-text">Discord сервер всегда активен — заходи, познакомься с составом.</p><div class="card-corner"></div></div>
-      </div>
-    </section>
+        <div class="container metrics-row reveal">
+          <article class="metric">
+            <div class="metric-label">Позиционирование</div>
+            <div class="metric-value">VIP</div>
+            <p class="metric-text">Сайт теперь ощущается как бренд закрытой элитной семьи, а не как обычный RP-лендинг.</p>
+          </article>
+          <article class="metric">
+            <div class="metric-label">Стиль</div>
+            <div class="metric-value">Luxury</div>
+            <p class="metric-text">Чёрный фон, золото, стекло, мягкий свет и премиальная типографика вместо кислотного неона.</p>
+          </article>
+          <article class="metric">
+            <div class="metric-label">Навигация</div>
+            <div class="metric-value">Multi</div>
+            <p class="metric-text">Каждая вкладка вынесена на отдельную страницу, чтобы тебе было удобнее работать с проектом в VS Code.</p>
+          </article>
+        </div>
+      </section>
 
-    <div class="section-divider"></div>
-    
-    <section class="section" id="partners">
-      <div class="section-header reveal">
-        <span class="section-tag">// 02 — МЕДИА //</span>
-        <h2 class="section-title">МЕДИА СЕМЬИ</h2>
-        <div class="section-line"></div>
-        <p style="color:#6b7c8f;margin-top:1rem;">Наши стримеры и ютуберы — нажми на карточку чтобы выбрать платформу</p>
-      </div>
-      <div class="media-grid reveal" id="mediaGrid" role="list" aria-label="Media personalities"></div>
-      <div style="text-align:center;margin-top:2rem;">
-        <span style="font-family:'Share Tech Mono',monospace;font-size:.65rem;color:#6b7c8f;">СТАТИСТИКА ОБНОВЛЯЕТСЯ АВТОМАТИЧЕСКИ &nbsp;·&nbsp; <span id="last-update-time">—</span></span>
-      </div>
-    </section>
+      <section class="section">
+        <div class="container split">
+          <article class="panel reveal">
+            <span class="section-label">Концепт бренда</span>
+            <h2 class="panel-title">Новый визуальный язык Royce Family</h2>
+            <p>
+              Редизайн переведён из single-page формата в полноценный многопользовательский premium-сайт с отдельными страницами, чистой архитектурой и более дорогой подачей.
+            </p>
+            <ul class="panel-list">
+              <li><span>Luxury цветовая схема: глубокий чёрный, графит, благородное золото и холодный металл.</span></li>
+              <li><span>Более зрелая структура контента: акцент не на свечение, а на статус, дисциплину и атмосферу семьи.</span></li>
+              <li><span>Упрощённое редактирование в VS Code: каждая логическая часть сайта теперь находится на своей странице.</span></li>
+            </ul>
+          </article>
 
-    <div class="section-divider"></div>
-    
-    <section class="section" style="text-align:center">
-      <div class="reveal">
-        <span class="section-tag">// ГОТОВ ВСТУПИТЬ? //</span>
-        <h2 class="section-title" style="margin-bottom:1.5rem">СТАНЬ ЧАСТЬЮ СЕМЬИ</h2>
-        <p style="color:#6b7c8f;max-width:500px;margin:0 auto 2.5rem;">Оставь заявку — и мы свяжемся с тобой для интервью.</p>
-        <a href="apply.html" class="btn btn-primary">Подать заявку</a>
-      </div>
-    </section>
+          <aside class="panel reveal">
+            <span class="section-label">Состав разделов</span>
+            <h2 class="panel-title">Что теперь есть в проекте</h2>
+            <div class="panel-list">
+              <li><span><strong>index.html</strong> — главная страница с позиционированием и CTA.</span></li>
+              <li><span><strong>about.html</strong> — история, ценности, преимущества и структура семьи.</span></li>
+              <li><span><strong>media.html</strong> — медиа-партнёры и статистика.</span></li>
+              <li><span><strong>apply.html</strong> — стильная форма подачи заявки.</span></li>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <div class="section-head reveal">
+            <div>
+              <span class="section-label">Преимущества</span>
+              <h2 class="section-title">Почему такой формат лучше</h2>
+            </div>
+            <p class="section-copy">Ты просил сделать не просто прокрутку вниз, а нормальные вкладки на отдельных страницах. Именно под это и перестроена вся логика сайта.</p>
+          </div>
+
+          <div class="grid-3">
+            <article class="card reveal">
+              <div class="card-icon">01</div>
+              <h3>Удобнее редактировать</h3>
+              <p>В VS Code тебе проще поддерживать отдельные страницы, чем держать всю структуру в одном длинном index.html.</p>
+            </article>
+            <article class="card reveal">
+              <div class="card-icon">02</div>
+              <h3>Более премиальная подача</h3>
+              <p>Каждый раздел получил своё пространство и выглядит как самостоятельная luxury-секция, а не часть старого скролл-лендинга.</p>
+            </article>
+            <article class="card reveal">
+              <div class="card-icon">03</div>
+              <h3>Легче масштабировать</h3>
+              <p>Позже ты без проблем добавишь ещё страницы: правила, состав, автопарк, бизнесы, галерею или донат/VIP-раздел.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container cta-banner reveal">
+          <div>
+            <h2>Сайт уже готов к дальнейшей сборке</h2>
+            <p>Если захочешь, следующим этапом можно добавить ещё больше атмосферы: фоновые изображения из GTA 5 RP, живую галерею, раздел состава, серверные правила и отдельную страницу для бизнеса/автопарка.</p>
+          </div>
+          <div style="display:flex;gap:12px;flex-wrap:wrap;">
+            <a href="about.html" class="btn btn-primary">Перейти к разделам</a>
+            <a href="rules.html" class="btn btn-secondary">Открыть правила</a>
+          </div>
+        </div>
+      </section>
+    </main>
 
     <footer class="footer">
-      <div class="footer-logo">ROYCE FAMILY</div>
-      <div class="footer-text">© 2024 · GTA 5 RP · Los Santos · <a href="admin.html">ADMIN</a></div>
+      <div class="container footer-card">
+        <div>
+          <div class="brand-title">ROYCE FAMILY</div>
+          <div class="footer-copy">© <span data-year></span> · GTA 5 RP · redesigned for multi-page luxury experience</div>
+        </div>
+        <div class="footer-links">
+          <a href="about.html" class="nav-link">О семье</a>
+          <a href="media.html" class="nav-link">Медиа</a>
+          <a href="rules.html" class="nav-link">Правила</a>
+          <a href="apply.html" class="nav-link">Вступить</a>
+          <a href="admin.html" class="nav-link">Admin</a>
+        </div>
+      </div>
     </footer>
   </div>
 
-  <div id="platform-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-name" onclick="closeModal(event)">
-    <div class="modal-box">
-      <button class="modal-close" onclick="document.getElementById('platform-modal').classList.remove('open')" aria-label="Close modal">✕</button>
-      <div class="modal-avatar-wrap"><img id="modal-avatar" class="modal-avatar" alt="" src=""></div>
-      <div class="modal-name" id="modal-name"></div>
-      <div class="modal-desc" id="modal-desc"></div>
-      <div class="modal-btns" id="modal-btns" role="list"></div>
-    </div>
-  </div>
-
-  <script src="mock-api.js"></script>
-  <script>
-    // Мобильное меню с ARIA
-    const navToggle = document.getElementById('navToggle');
-    const navLinks = document.getElementById('navLinks');
-    navToggle.addEventListener('click', () => {
-      const isOpen = navLinks.classList.toggle('open');
-      navToggle.setAttribute('aria-expanded', isOpen);
-    });
-
-    // Закрытие меню по Escape
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && navLinks.classList.contains('open')) {
-        navLinks.classList.remove('open');
-        navToggle.setAttribute('aria-expanded', 'false');
-      }
-    });
-
-    // Печатающий текст с курсором
-    const phrases = ['Добро пожаловать в Los Santos', 'Мы — семья, а не просто фракция', 'Твоё место в городе ждёт тебя'];
-    let pi = 0, ci = 0, del = false;
-    const el = document.getElementById('heroTyping');
-    function type() {
-      const p = phrases[pi];
-      if (!del) {
-        el.textContent = p.slice(0, ++ci);
-        if (ci === p.length) { del = true; setTimeout(type, 2200); return; }
-      } else {
-        el.textContent = p.slice(0, --ci);
-        if (ci === 0) { del = false; pi = (pi + 1) % phrases.length; }
-      }
-      setTimeout(type, del ? 38 : 65);
-    }
-    type();
-
-    const obs = new IntersectionObserver(entries => {
-      entries.forEach(e => {
-        if (e.isIntersecting) {
-          e.target.classList.add('visible');
-          obs.unobserve(e.target);
-        }
-      });
-    }, { threshold: .1 });
-    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
-
-    // Загрузка медиа-партнёров из localStorage
-    function getMediaPartners() {
-      const saved = localStorage.getItem('royce_media');
-      if (saved) {
-        try { return JSON.parse(saved); } catch (e) { console.warn('Failed to parse media partners', e); }
-      }
-      const defaultMedia = {
-        loves65: { name: 'Loves65', avatar: 'https://unavatar.io/twitch/loves65', avatarFallback: 'https://ui-avatars.com/api/?name=L&background=00ff9f&color=000', desc: 'GTA 5 RP — стримит жизнь на сервере', twitch: 'https://www.twitch.tv/loves65', youtube: 'https://www.youtube.com/@Loves65' },
-        karapyzz: { name: 'Karapuzz69', avatar: 'https://unavatar.io/twitch/karapyzz69', avatarFallback: 'https://ui-avatars.com/api/?name=K&background=9146ff&color=fff', desc: 'GTA 5 RP — антисоциальный контент', twitch: 'https://www.twitch.tv/karapyzz69', youtube: 'https://www.youtube.com/@KarapyzzAntisocials' },
-        daszook: { name: 'daszook', avatar: 'https://unavatar.io/twitch/daszook', avatarFallback: 'https://ui-avatars.com/api/?name=D&background=00cfff&color=000', desc: 'GTA 5 RP — стримы и видео', twitch: 'https://www.twitch.tv/daszook', youtube: 'https://www.youtube.com/@daszook' },
-        scrooge: { name: 'Scrooge', avatar: 'https://unavatar.io/youtube/Scrooge5rp', avatarFallback: 'https://ui-avatars.com/api/?name=S&background=ff3a3a&color=fff', desc: 'YouTube — нарезки с GTA 5 RP', youtube: 'https://www.youtube.com/@Scrooge5rp' },
-        vuitton: { name: 'Vuitton', avatar: 'https://unavatar.io/twitch/vu1ttongg', avatarFallback: 'https://ui-avatars.com/api/?name=V&background=ffe600&color=000', desc: 'GTA 5 RP — стиль жизни в городе', twitch: 'https://www.twitch.tv/vu1ttongg', youtube: 'https://www.youtube.com/@Vuitton-gg' },
-        escamismed: { name: 'Escamismed', avatar: 'https://unavatar.io/twitch/escapismed', avatarFallback: 'https://ui-avatars.com/api/?name=E&background=9146ff&color=fff', desc: 'Twitch — живые стримы GTA 5 RP', twitch: 'https://www.twitch.tv/escapismed' }
-      };
-      localStorage.setItem('royce_media', JSON.stringify(defaultMedia));
-      return defaultMedia;
-    }
-
-    const MEDIA = getMediaPartners();
-
-    const STATS_IDS = {
-      loves65: { yt: 'yt-sub-loves65', tw: 'tw-fol-loves65' },
-      karapyzz: { yt: 'yt-sub-karapyzz', tw: 'tw-fol-karapyzz' },
-      daszook: { yt: 'yt-sub-daszook', tw: 'tw-fol-daszook' },
-      scrooge: { yt: 'yt-sub-scrooge' },
-      vuitton: { yt: 'yt-sub-vuitton', tw: 'tw-fol-vuitton' },
-      escamismed: { tw: 'tw-fol-escamismed' }
-    };
-
-    function renderMediaGrid() {
-      const grid = document.getElementById('mediaGrid');
-      grid.innerHTML = Object.entries(MEDIA).map(([key, m]) => `
-        <div class="media-card" role="listitem" tabindex="0" data-key="${key}" onclick="openModal('${key}')" onkeydown="if(event.key==='Enter'||event.key===' ') openModal('${key}')">
-          <div class="media-avatar-wrap">
-            <img class="media-avatar" src="${m.avatar}" onerror="handleAvatarError(this, '${m.avatarFallback}')" alt="${m.name} avatar">
-          </div>
-          <div class="media-info">
-            <div class="media-name">${m.name}</div>
-            <div class="media-desc">${m.desc}</div>
-            <div class="media-platforms">
-              ${m.twitch ? `<span class="plat-badge twitch-badge">💜 Twitch</span>` : ''}
-              ${m.youtube ? `<span class="plat-badge yt-badge">📺 YouTube</span>` : ''}
-            </div>
-            <div class="media-stats" id="stats-${key}">
-              ${m.youtube ? `<div class="stat-pill"><span class="stat-pill-val" id="${STATS_IDS[key]?.yt || ''}">—</span><span>подписчиков</span></div>` : ''}
-              ${m.twitch ? `<div class="stat-pill twitch-pill"><span class="stat-pill-val" id="${STATS_IDS[key]?.tw || ''}">—</span><span>фолловеров</span></div>` : ''}
-            </div>
-          </div>
-          <div class="media-hover-hint">НАЖМИ ДЛЯ ВЫБОРА</div>
-        </div>
-      `).join('');
-    }
-
-    // Полный fallback цепочки: unavatar → ui-avatars → инициалы → blank
-    window.handleAvatarError = function(img, fallback) {
-      if (!img) return;
-      if (img.src !== fallback) {
-        img.src = fallback;
-        return;
-      }
-      const initials = img.alt?.charAt(0)?.toUpperCase() || '?';
-      img.src = `https://ui-avatars.com/api/?name=${initials}&background=00ff9f&color=000&size=80`;
-    };
-
-    window.openModal = function(key) {
-      const m = MEDIA[key];
-      if (!m) return;
-      document.getElementById('modal-name').textContent = m.name;
-      document.getElementById('modal-desc').textContent = m.desc;
-      const img = document.getElementById('modal-avatar');
-      img.alt = `${m.name} avatar`;
-      img.src = m.avatar;
-      img.onerror = () => { handleAvatarError(img, m.avatarFallback); };
-      let btns = '';
-      if (m.twitch) btns += `<a href="${m.twitch}" target="_blank" rel="noopener noreferrer" class="modal-btn modal-btn-twitch" role="listitem">💜 Смотреть на Twitch</a>`;
-      if (m.youtube) btns += `<a href="${m.youtube}" target="_blank" rel="noopener noreferrer" class="modal-btn modal-btn-yt" role="listitem">📺 Смотреть на YouTube</a>`;
-      document.getElementById('modal-btns').innerHTML = btns;
-      document.getElementById('platform-modal').classList.add('open');
-      document.getElementById('platform-modal').focus();
-    };
-
-    window.closeModal = function(e) {
-      if (e.target === document.getElementById('platform-modal')) {
-        document.getElementById('platform-modal').classList.remove('open');
-      }
-    };
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape') {
-        document.getElementById('platform-modal').classList.remove('open');
-        document.activeElement?.blur();
-      }
-    });
-
-    // Загрузка статистики с debounce (мин. 3 сек между обновлениями)
-    let lastStatsUpdate = 0;
-    const STATS_DEBOUNCE_MS = 3000;
-
-    async function loadStats() {
-      const now = Date.now();
-      if (now - lastStatsUpdate < STATS_DEBOUNCE_MS) return;
-      try {
-        const stats = await window.fetchMediaStats?.();
-        if (!stats) return;
-        Object.entries(stats).forEach(([id, val]) => {
-          const twEl = document.getElementById(STATS_IDS[id]?.tw);
-          const ytEl = document.getElementById(STATS_IDS[id]?.yt);
-          if (twEl) twEl.textContent = val.tw?.toLocaleString('ru-RU') || '—';
-          if (ytEl) ytEl.textContent = val.yt?.toLocaleString('ru-RU') || '—';
-        });
-        const lastUpdate = localStorage.getItem('stats_last_update');
-        const timeEl = document.getElementById('last-update-time');
-        if (timeEl && lastUpdate) {
-          timeEl.textContent = new Date(parseInt(lastUpdate)).toLocaleString('ru-RU');
-        }
-        lastStatsUpdate = now;
-      } catch (e) {
-        console.warn('Stats update failed:', e);
-      }
-    }
-
-    renderMediaGrid();
-    loadStats();
-    setInterval(loadStats, 5000);
-  </script>
+  <script src="app.js"></script>
 </body>
 </html>

@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Медиа — Royce Family</title>
+  <meta name="description" content="Медиа-партнёры Royce Family, статистика и переходы на платформы.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="media">
+  <div class="page-shell">
+    <header class="topbar">
+      <div class="container topbar-inner">
+        <a href="index.html" class="brand" aria-label="Royce Family home">
+          <span class="brand-mark">R</span>
+          <span class="brand-text">
+            <span class="brand-title">ROYCE FAMILY</span>
+            <span class="brand-subtitle">Luxury GTA 5 RP</span>
+          </span>
+        </a>
+        <button class="nav-toggle" id="navToggle" aria-label="Открыть меню" aria-expanded="false">☰</button>
+        <nav class="nav" id="mainNav">
+          <div class="nav-links">
+            <a href="index.html" class="nav-link" data-page-link="home">Главная</a>
+            <a href="about.html" class="nav-link" data-page-link="about">О семье</a>
+            <a href="media.html" class="nav-link" data-page-link="media">Медиа</a>
+            <a href="rules.html" class="nav-link" data-page-link="rules">Правила</a>
+            <a href="apply.html" class="nav-link" data-page-link="apply">Вступить</a>
+          </div>
+          <a href="apply.html" class="btn btn-primary nav-cta">Подать заявку</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="page-hero">
+        <div class="container">
+          <div class="page-hero-card reveal">
+            <div class="kicker">Медиа семьи</div>
+            <h1>Лица, контент и живой трафик Royce Family</h1>
+            <p>
+              Здесь собраны медиа-партнёры семьи. Раздел остался функциональным, но визуально был приведён к единому luxury-стилю. Теперь пользователь открывает отдельную страницу, а не ищет карточки внутри длинного скролла.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <div class="section-head reveal">
+            <div>
+              <span class="section-label">Медиа-партнёры</span>
+              <h2 class="section-title">Актуальные карточки с платформами</h2>
+            </div>
+            <p class="section-copy">Нажатие на карточку открывает отдельное окно с выбором платформы. Статистика продолжает подгружаться из localStorage через mock-api.js.</p>
+          </div>
+
+          <div class="media-grid" id="mediaGrid"></div>
+          <p class="last-update reveal" style="margin-top:18px;" id="lastUpdateText">Последнее обновление статистики: —</p>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container cta-banner reveal">
+          <div>
+            <h2>Хочешь, чтобы пользователь после медиа сразу конвертировался?</h2>
+            <p>Следующая логичная страница — форма вступления. Такой переход делает сайт собранным и повышает шанс, что человек реально оставит заявку.</p>
+          </div>
+          <div style="display:flex;gap:12px;flex-wrap:wrap;">
+            <a href="rules.html" class="btn btn-secondary">Посмотреть правила</a>
+            <a href="apply.html" class="btn btn-primary">Перейти к заявке</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="container footer-card">
+        <div>
+          <div class="brand-title">ROYCE FAMILY</div>
+          <div class="footer-copy">© <span data-year></span> · медиа-раздел в отдельной странице</div>
+        </div>
+        <div class="footer-links">
+          <a href="index.html" class="nav-link">Главная</a>
+          <a href="about.html" class="nav-link">О семье</a>
+          <a href="rules.html" class="nav-link">Правила</a>
+          <a href="apply.html" class="nav-link">Вступить</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <div class="media-modal" id="platformModal" aria-hidden="true">
+    <div class="media-modal-box">
+      <button class="media-close" id="closeModalBtn" aria-label="Закрыть">✕</button>
+      <div class="media-top" style="margin-bottom:18px;">
+        <img src="" alt="" id="modalAvatar" class="avatar">
+        <div>
+          <h3 id="modalName" style="margin-bottom:8px;"></h3>
+          <p id="modalDesc" style="color:var(--muted-strong);"></p>
+        </div>
+      </div>
+      <div class="media-actions" id="modalActions"></div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script src="mock-api.js"></script>
+  <script>
+    const defaultMedia = {
+      loves65: {
+        name: 'Loves65',
+        avatar: 'https://unavatar.io/twitch/loves65',
+        avatarFallback: 'https://ui-avatars.com/api/?name=L&background=11151d&color=E7D6A8',
+        desc: 'GTA 5 RP — стримы, атмосфера города и живая подача сервера.',
+        twitch: 'https://www.twitch.tv/loves65',
+        youtube: 'https://www.youtube.com/@Loves65'
+      },
+      karapyzz: {
+        name: 'Karapyzz69',
+        avatar: 'https://unavatar.io/twitch/karapyzz69',
+        avatarFallback: 'https://ui-avatars.com/api/?name=K&background=11151d&color=E7D6A8',
+        desc: 'Харизматичный RP-контент и уличный вайб Los Santos.',
+        twitch: 'https://www.twitch.tv/karapyzz69',
+        youtube: 'https://www.youtube.com/@KarapyzzAntisocials'
+      },
+      daszook: {
+        name: 'daszook',
+        avatar: 'https://unavatar.io/twitch/daszook',
+        avatarFallback: 'https://ui-avatars.com/api/?name=D&background=11151d&color=E7D6A8',
+        desc: 'Стримы и видео по GTA 5 RP с живыми игровыми моментами.',
+        twitch: 'https://www.twitch.tv/daszook',
+        youtube: 'https://www.youtube.com/@daszook'
+      },
+      scrooge: {
+        name: 'Scrooge',
+        avatar: 'https://unavatar.io/youtube/Scrooge5rp',
+        avatarFallback: 'https://ui-avatars.com/api/?name=S&background=11151d&color=E7D6A8',
+        desc: 'YouTube-формат с нарезками и контентом по GTA 5 RP.',
+        youtube: 'https://www.youtube.com/@Scrooge5rp'
+      },
+      vuitton: {
+        name: 'Vuitton',
+        avatar: 'https://unavatar.io/twitch/vu1ttongg',
+        avatarFallback: 'https://ui-avatars.com/api/?name=V&background=11151d&color=E7D6A8',
+        desc: 'Стиль жизни в городе, стримы и медийный образ семьи.',
+        twitch: 'https://www.twitch.tv/vu1ttongg',
+        youtube: 'https://www.youtube.com/@Vuitton-gg'
+      },
+      escamismed: {
+        name: 'Escamismed',
+        avatar: 'https://unavatar.io/twitch/escapismed',
+        avatarFallback: 'https://ui-avatars.com/api/?name=E&background=11151d&color=E7D6A8',
+        desc: 'Twitch-поддержка, прямые эфиры и общение с аудиторией.',
+        twitch: 'https://www.twitch.tv/escapismed'
+      }
+    };
+
+    const STORAGE_KEY = 'royce_media';
+    const mediaData = (() => {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        try {
+          return JSON.parse(saved);
+        } catch (error) {
+          console.warn('Не удалось прочитать сохранённые медиа-данные', error);
+        }
+      }
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultMedia));
+      return defaultMedia;
+    })();
+
+    const statsIds = {
+      loves65: { yt: 'yt-sub-loves65', tw: 'tw-fol-loves65' },
+      karapyzz: { yt: 'yt-sub-karapyzz', tw: 'tw-fol-karapyzz' },
+      daszook: { yt: 'yt-sub-daszook', tw: 'tw-fol-daszook' },
+      scrooge: { yt: 'yt-sub-scrooge' },
+      vuitton: { yt: 'yt-sub-vuitton', tw: 'tw-fol-vuitton' },
+      escamismed: { tw: 'tw-fol-escamismed' }
+    };
+
+    const grid = document.getElementById('mediaGrid');
+    const modal = document.getElementById('platformModal');
+    const modalName = document.getElementById('modalName');
+    const modalDesc = document.getElementById('modalDesc');
+    const modalAvatar = document.getElementById('modalAvatar');
+    const modalActions = document.getElementById('modalActions');
+    const lastUpdateText = document.getElementById('lastUpdateText');
+
+    function handleAvatarError(img, fallback) {
+      if (!img) return;
+      if (img.src !== fallback) {
+        img.src = fallback;
+      }
+    }
+
+    function renderMedia() {
+      grid.innerHTML = Object.entries(mediaData).map(([key, item]) => `
+        <article class="media-card reveal" tabindex="0" data-key="${key}">
+          <div class="media-top">
+            <img class="avatar" src="${item.avatar}" alt="${item.name}" onerror="this.onerror=null; this.src='${item.avatarFallback}';">
+            <div>
+              <h3>${item.name}</h3>
+              <p>${item.desc}</p>
+            </div>
+          </div>
+          <div class="media-badges">
+            ${item.twitch ? '<span class="badge purple">Twitch</span>' : ''}
+            ${item.youtube ? '<span class="badge red">YouTube</span>' : ''}
+          </div>
+          <div class="stat-pills" id="stats-${key}">
+            ${item.youtube ? `<span class="stat-pill gold"><strong id="${statsIds[key]?.yt || ''}">—</strong>&nbsp;подписчиков</span>` : ''}
+            ${item.twitch ? `<span class="stat-pill"><strong id="${statsIds[key]?.tw || ''}">—</strong>&nbsp;фолловеров</span>` : ''}
+          </div>
+          <div class="media-actions">
+            <button class="btn btn-secondary" type="button">Открыть ссылки</button>
+          </div>
+        </article>
+      `).join('');
+
+      document.querySelectorAll('.media-card').forEach(card => {
+        card.classList.add('visible');
+        card.addEventListener('click', () => openModal(card.dataset.key));
+        card.addEventListener('keydown', (event) => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            openModal(card.dataset.key);
+          }
+        });
+      });
+    }
+
+    function openModal(key) {
+      const item = mediaData[key];
+      if (!item) return;
+      modalName.textContent = item.name;
+      modalDesc.textContent = item.desc;
+      modalAvatar.src = item.avatar;
+      modalAvatar.alt = item.name;
+      modalAvatar.onerror = () => handleAvatarError(modalAvatar, item.avatarFallback);
+      modalActions.innerHTML = `
+        ${item.twitch ? `<a class="btn btn-secondary" href="${item.twitch}" target="_blank" rel="noopener noreferrer">Открыть Twitch</a>` : ''}
+        ${item.youtube ? `<a class="btn btn-primary" href="${item.youtube}" target="_blank" rel="noopener noreferrer">Открыть YouTube</a>` : ''}
+      `;
+      modal.classList.add('open');
+      modal.setAttribute('aria-hidden', 'false');
+    }
+
+    function closeModal() {
+      modal.classList.remove('open');
+      modal.setAttribute('aria-hidden', 'true');
+    }
+
+    document.getElementById('closeModalBtn').addEventListener('click', closeModal);
+    modal.addEventListener('click', (event) => {
+      if (event.target === modal) closeModal();
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') closeModal();
+    });
+
+    async function loadStats() {
+      try {
+        const stats = await window.fetchMediaStats?.();
+        if (!stats) return;
+        Object.entries(stats).forEach(([key, value]) => {
+          const yt = document.getElementById(statsIds[key]?.yt);
+          const tw = document.getElementById(statsIds[key]?.tw);
+          if (yt) yt.textContent = value.yt?.toLocaleString('ru-RU') || '—';
+          if (tw) tw.textContent = value.tw?.toLocaleString('ru-RU') || '—';
+        });
+
+        const lastUpdate = localStorage.getItem('stats_last_update');
+        if (lastUpdate) {
+          lastUpdateText.textContent = `Последнее обновление статистики: ${new Date(Number(lastUpdate)).toLocaleString('ru-RU')}`;
+        }
+      } catch (error) {
+        console.warn('Не удалось загрузить статистику', error);
+      }
+    }
+
+    renderMedia();
+    loadStats();
+    setInterval(loadStats, 5000);
+  </script>
+</body>
+</html>

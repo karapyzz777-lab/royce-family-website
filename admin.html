@@ -3,518 +3,386 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Админ-панель — ROYCE FAMILY</title>
+  <title>Admin — Royce Family</title>
+  <meta name="description" content="Админ-панель Royce Family для просмотра и обработки заявок.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
-  <style>
-    .admin-section { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 4rem 2rem; background: radial-gradient(ellipse at 50% 30%, rgba(0,255,159,.03), transparent 60%); }
-    .admin-login-box, .login-form { background: #0d1117; border: 1px solid rgba(0,255,159,.15); border-top: 2px solid #00ff9f; padding: 2.5rem; max-width: 400px; width: 100%; text-align: center; margin: 0 auto; }
-    .admin-title { font-family: 'Orbitron', monospace; font-size: 1.5rem; font-weight: 900; color: #fff; letter-spacing: 3px; margin-bottom: 0.5rem; }
-    .admin-subtitle { font-family: 'Share Tech Mono', monospace; font-size: .7rem; color: #00ff9f; letter-spacing: 2px; margin-bottom: 2rem; }
-    .form-input { width: 100%; padding: 0.9rem 1rem; background: #161b22; border: 1px solid rgba(0,255,159,.2); border-top: 1px solid rgba(0,255,159,.4); color: #c8d8e4; font-family: 'Rajdhani', sans-serif; font-size: 1rem; outline: none; transition: border-color .2s, box-shadow .2s; border-radius: 2px; }
-    .form-input:focus { border-color: #00ff9f; box-shadow: 0 0 0 2px rgba(0,255,159,.1); }
-    .btn-login { width: 100%; padding: 1rem; font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 1rem; letter-spacing: 2px; background: rgba(0,255,159,.15); border: 1px solid rgba(0,255,159,.4); color: #00ff9f; border-radius: 2px; cursor: pointer; transition: all .3s; margin-top: 1rem; }
-    .btn-login:hover { background: rgba(0,255,159,.25); color: #fff; }
-    .btn-logout { background: rgba(255,58,58,.15); border: 1px solid rgba(255,58,58,.4); color: #ff3a3a; padding: 0.5rem 1rem; }
-    .btn-logout:hover { background: rgba(255,58,58,.25); color: #fff; }
-
-    .admin-panel { display: none; max-width: 1200px; margin: 0 auto; padding: 2rem; }
-    .admin-panel.show { display: block; }
-    .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
-    .admin-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2rem; }
-    .stat-card { background: #0d1117; border: 1px solid rgba(0,255,159,.12); border-top: 2px solid #00ff9f; padding: 1.5rem; text-align: center; }
-    .stat-value { font-family: 'Orbitron', monospace; font-size: 2.5rem; font-weight: 900; color: #00ff9f; }
-    .stat-label { font-family: 'Share Tech Mono', monospace; font-size: .7rem; color: #6b7c8f; letter-spacing: 1px; text-transform: uppercase; margin-top: 0.5rem; }
-    .filter-tabs { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; border-bottom: 1px solid rgba(0,255,159,.12); padding-bottom: 0.5rem; }
-    .filter-tab { font-family: 'Share Tech Mono', monospace; font-size: .75rem; color: #6b7c8f; background: none; border: none; padding: 0.5rem 1rem; cursor: pointer; transition: all .2s; position: relative; letter-spacing: 1px; }
-    .filter-tab:hover { color: #00ff9f; }
-    .filter-tab.active { color: #00ff9f; font-weight: 700; }
-    .filter-tab.active::after { content: ''; position: absolute; bottom: -0.6rem; left: 0; right: 0; height: 2px; background: #00ff9f; }
-    .admin-table-wrap { background: #0d1117; border: 1px solid rgba(0,255,159,.12); border-top: 2px solid #00ff9f; padding: 1.5rem; overflow-x: auto; }
-    .admin-table { width: 100%; border-collapse: collapse; font-family: 'Share Tech Mono', monospace; font-size: .8rem; }
-    .admin-table th { text-align: left; color: #00ff9f; padding: 0.8rem; border-bottom: 1px solid rgba(0,255,159,.2); letter-spacing: 2px; text-transform: uppercase; }
-    .admin-table td { padding: 0.8rem; border-bottom: 1px solid rgba(0,255,159,.08); color: #c8d8e4; }
-    .admin-table tr:hover { background: rgba(0,255,159,.04); cursor: pointer; }
-    .admin-table tr:last-child td { border-bottom: none; }
-    .no-data { text-align: center; padding: 3rem; color: #6b7c8f; font-family: 'Share Tech Mono', monospace; }
-    .empty-state { text-align: center; padding: 4rem 2rem; color: #6b7c8f; }
-    .empty-state-icon { font-size: 3rem; display: block; margin-bottom: 1rem; }
-
-    .admin-modal-overlay { position: fixed; inset: 0; z-index: 10000; background: rgba(0,0,0,.9); backdrop-filter: blur(10px); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity .3s; }
-    .admin-modal-overlay.open { opacity: 1; pointer-events: all; }
-    .admin-modal-box { background: #0d1117; border: 1px solid rgba(0,255,159,.2); border-top: 2px solid #00ff9f; padding: 2.5rem; max-width: 600px; width: 90%; max-height: 90vh; overflow-y: auto; position: relative; }
-    .admin-modal-close { position: absolute; top: .9rem; right: 1rem; background: none; border: none; color: #6b7c8f; cursor: pointer; font-size: 1.2rem; padding: 0.5rem; }
-    .admin-modal-close:hover { color: #fff; }
-    .admin-modal-title { font-family: 'Orbitron', monospace; font-size: 1.3rem; font-weight: 900; color: #fff; letter-spacing: 2px; margin-bottom: 1.5rem; padding-right: 2rem; }
-    .admin-modal-field { margin-bottom: 1.2rem; }
-    .admin-modal-label { font-family: 'Share Tech Mono', monospace; font-size: .65rem; color: #00ff9f; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 0.3rem; display: block; }
-    .admin-modal-value { font-size: 1rem; color: #c8d8e4; line-height: 1.6; background: rgba(0,0,0,.3); padding: 0.8rem; border: 1px solid rgba(0,255,159,.1); }
-    .admin-modal-actions { display: flex; gap: 1rem; margin-top: 2rem; justify-content: flex-end; }
-    .admin-modal-btn { padding: 0.7rem 1.5rem; font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: .9rem; letter-spacing: 1px; border-radius: 2px; cursor: pointer; transition: all .3s; }
-    .admin-btn-accept { background: rgba(0,255,159,.15); border: 1px solid rgba(0,255,159,.4); color: #00ff9f; }
-    .admin-btn-accept:hover { background: rgba(0,255,159,.25); color: #fff; }
-    .admin-btn-reject { background: rgba(255,58,58,.15); border: 1px solid rgba(255,58,58,.4); color: #ff3a3a; }
-    .admin-btn-reject:hover { background: rgba(255,58,58,.25); color: #fff; }
-    .admin-btn-delete { background: rgba(107,124,143,.15); border: 1px solid rgba(107,124,143,.3); color: #6b7c8f; }
-    .admin-btn-delete:hover { background: rgba(107,124,143,.25); color: #fff; }
-    .btn-approve { background: rgba(0,255,159,.15); border: 1px solid rgba(0,255,159,.4); color: #00ff9f; }
-    .btn-approve:hover { background: rgba(0,255,159,.25); color: #fff; }
-    .btn-reject { background: rgba(255,58,58,.15); border: 1px solid rgba(255,58,58,.4); color: #ff3a3a; }
-    .btn-reject:hover { background: rgba(255,58,58,.25); color: #fff; }
-    .btn-delete { background: rgba(107,124,143,.15); border: 1px solid rgba(107,124,143,.3); color: #6b7c8f; }
-    .btn-delete:hover { background: rgba(107,124,143,.25); color: #fff; }
-
-    .reject-reason { margin-top: 1rem; padding: 1rem; background: rgba(255,58,58,.05); border: 1px solid rgba(255,58,58,.2); border-left: 3px solid #ff3a3a; border-radius: 2px; display: none; }
-    .reject-reason.show { display: block; }
-    .reject-reason-label { font-family: 'Share Tech Mono', monospace; font-size: .7rem; color: #ff3a3a; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 0.5rem; display: block; }
-    .reject-reason select, .reject-reason textarea { width: 100%; padding: 0.7rem; background: #161b22; border: 1px solid rgba(255,58,58,.3); color: #c8d8e4; font-family: 'Rajdhani', sans-serif; font-size: 0.9rem; border-radius: 2px; outline: none; margin-bottom: 0.5rem; }
-    .reject-reason select:focus, .reject-reason textarea:focus { border-color: #ff3a3a; }
-    .reject-reason textarea { min-height: 80px; resize: vertical; }
-
-    .notification {
-      position: fixed; top: 80px; right: 20px; z-index: 10001;
-      background: rgba(0,255,159,.1); border: 1px solid rgba(0,255,159,.3); border-left: 3px solid #00ff9f;
-      padding: 1rem 1.5rem; color: #00ff9f; font-family: 'Share Tech Mono', monospace; font-size: 0.8rem; border-radius: 2px; display: none; animation: slideIn 0.3s ease;
-    }
-    .notification.show { display: block; }
-    .notification.error { background: rgba(255,58,58,.1); border-color: #ff3a3a; color: #ff3a3a; }
-    @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-
-    @media (max-width: 768px) {
-      .admin-stats { grid-template-columns: repeat(2, 1fr); }
-      .filter-tabs { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-    }
-  </style>
 </head>
-<body>
-
-  <div class="bg-grid"></div>
-
-  <nav class="navbar">
-    <a href="index.html" class="nav-logo">ROYCE<span>&nbsp;FAMILY</span></a>
-    <button class="nav-toggle" id="navToggle"><span></span><span></span><span></span></button>
-    <ul class="nav-links" id="navLinks">
-      <li><a href="index.html">Главная</a></li>
-      <li><a href="index.html#about">О нас</a></li>
-      <li><a href="index.html#partners">Медиа</a></li>
-      <li><a href="apply.html">Вступить</a></li>
-    </ul>
-  </nav>
-
-  <!-- ЭКРАН АВТОРИЗАЦИИ -->
-  <div class="admin-section" id="loginScreen">
-    <div class="admin-login-box">
-      <div class="admin-title">🔐 ADMIN ACCESS</div>
-      <div class="admin-subtitle">// АДМИН-ПАНЕЛЬ ROYCE FAMILY //</div>
-      <form class="login-form" id="loginForm">
-        <div class="form-group">
-          <input type="password" id="adminPassword" class="form-input" placeholder="Введите пароль" required>
-        </div>
-        <button type="submit" class="btn-login">Войти</button>
-      </form>
+<body data-page="admin">
+  <div class="page-shell admin-shell">
+    <header class="topbar">
+      <div class="container topbar-inner">
+        <a href="index.html" class="brand" aria-label="Royce Family home">
+          <span class="brand-mark">R</span>
+          <span class="brand-text">
+            <span class="brand-title">ROYCE FAMILY</span>
+            <span class="brand-subtitle">Admin panel</span>
+          </span>
+        </a>
+        <button class="nav-toggle" id="navToggle" aria-label="Открыть меню" aria-expanded="false">☰</button>
+        <nav class="nav" id="mainNav">
+          <div class="nav-links">
+            <a href="index.html" class="nav-link">Главная</a>
+            <a href="about.html" class="nav-link">О семье</a>
+            <a href="media.html" class="nav-link">Медиа</a>
+            <a href="rules.html" class="nav-link">Правила</a>
+            <a href="apply.html" class="nav-link">Вступить</a>
+          </div>
+          <a href="apply.html" class="btn btn-secondary nav-cta">Вернуться на сайт</a>
+        </nav>
       </div>
-    </div>
-    </div>
-    <div class="tab-content" id="tab-media">
-      <div class="admin-table-wrap">
-        <div class="empty-state">
-          <span class="empty-state-icon">🎬</span>
-          <p>Медиа-партнёры будут управляться отсюда</p>
-          <p style="font-size:0.8rem;margin-top:0.5rem;color:#6b7c8f">Функция в разработке</p>
+    </header>
+
+    <main>
+      <section class="page-hero">
+        <div class="container">
+          <div class="page-hero-card reveal">
+            <div class="kicker">Admin access</div>
+            <h1>Панель заявок Royce Family</h1>
+            <p>Я также привёл в порядок admin.html: восстановил структуру, логику входа, таблицу заявок, фильтры и модальное окно обработки кандидатов.</p>
+          </div>
         </div>
-      </div>
-    </div>
+      </section>
+
+      <section class="section">
+        <div class="container admin-login" id="loginScreen">
+          <div class="form-panel reveal">
+            <div class="kicker">Авторизация</div>
+            <h2 class="form-title">Вход в админку</h2>
+            <p class="form-subtitle">Введи пароль и получи доступ к заявкам семьи.</p>
+            <form id="loginForm" class="form-grid" style="grid-template-columns:1fr;">
+              <div class="form-group full">
+                <label class="label" for="adminPassword">Пароль</label>
+                <input class="input" id="adminPassword" type="password" placeholder="Введите пароль" required>
+              </div>
+              <div>
+                <button class="btn btn-primary" type="submit">Войти</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <div class="container admin-panel" id="adminPanel">
+          <div class="admin-bar">
+            <div>
+              <div class="kicker">Dashboard</div>
+              <h2 class="form-title" style="font-size:2.4rem; margin-bottom:6px;">Управление заявками</h2>
+              <p class="form-subtitle" style="margin:0;">Одобрение, отклонение и удаление заявок в одном месте.</p>
+            </div>
+            <button class="btn btn-secondary" id="logoutBtn">Выйти</button>
+          </div>
+
+          <div class="admin-grid">
+            <article class="stat-box"><div class="stat-number" id="statTotal">0</div><div class="stat-label">Всего</div></article>
+            <article class="stat-box"><div class="stat-number" id="statPending">0</div><div class="stat-label">Новые</div></article>
+            <article class="stat-box"><div class="stat-number" id="statApproved">0</div><div class="stat-label">Принятые</div></article>
+            <article class="stat-box"><div class="stat-number" id="statRejected">0</div><div class="stat-label">Отклонённые</div></article>
+          </div>
+
+          <div class="filter-row" id="filterTabs">
+            <button class="filter-btn active" data-filter="all">Все</button>
+            <button class="filter-btn" data-filter="pending">Новые</button>
+            <button class="filter-btn" data-filter="approved">Принятые</button>
+            <button class="filter-btn" data-filter="rejected">Отклонённые</button>
+          </div>
+
+          <div class="table-wrap">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Дата</th>
+                  <th>Никнейм</th>
+                  <th>Discord</th>
+                  <th>Возраст</th>
+                  <th>Опыт</th>
+                  <th>Статус</th>
+                </tr>
+              </thead>
+              <tbody id="applicationsTable"></tbody>
+            </table>
+            <div class="empty-state" id="emptyState" style="display:none;">Заявок пока нет</div>
+          </div>
+        </div>
+      </section>
+    </main>
   </div>
 
-    <div class="admin-tabs">
-      <button class="admin-tab active" data-tab="applications">📋 Заявки</button>
-      <button class="admin-tab" data-tab="media">🎬 Медиа-партнёры</button>
-    </div>
-
-    <div class="tab-content active" id="tab-applications">
-      <div class="admin-stats">
-      <div class="stat-card">
-        <div class="stat-value" id="statTotal">0</div>
-        <div class="stat-label">Всего заявок</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-value" id="statPending">0</div>
-        <div class="stat-label">Новых</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-value" id="statApproved">0</div>
-        <div class="stat-label">Одобренных</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-value" id="statRejected">0</div>
-        <div class="stat-label">Отклонённых</div>
-      </div>
-    </div>
-
-    <div class="filter-tabs" id="filterTabs">
-      <button class="filter-tab active" data-filter="all">Все</button>
-      <button class="filter-tab" data-filter="pending">Новые</button>
-      <button class="filter-tab" data-filter="approved">Одобренные</button>
-      <button class="filter-tab" data-filter="rejected">Отклонённые</button>
-    </div>
-
-    <div class="admin-table-wrap">
-      <table class="admin-table">
-        <thead>
-          <tr>
-            <th>Дата</th>
-            <th>Никнейм</th>
-            <th>Discord</th>
-            <th>Возраст</th>
-            <th>Опыт</th>
-            <th>Статус</th>
-          </tr>
-        </thead>
-        <tbody id="applicationsTable"></tbody>
-      </table>
-      <div class="empty-state" id="emptyState" style="display:none">
-        <span class="empty-state-icon">📭</span>
-        Заявок пока нет
-      </div>
-    </div>
-  </div>
-
-  <!-- МОДАЛЬНОЕ ОКНО ЗАЯВКИ -->
-  <div class="admin-modal-overlay" id="applicationModal" onclick="closeModal(event)">
+  <div class="admin-modal" id="applicationModal">
     <div class="admin-modal-box">
-      <button class="admin-modal-close" onclick="closeModalDirect()">✕</button>
-      <div class="admin-modal-title" id="modalTitle">Заявка</div>
-
-      <div class="admin-modal-field">
-        <span class="admin-modal-label">Дата подачи</span>
-        <div class="admin-modal-value" id="modalDate">—</div>
+      <button class="admin-modal-close" id="closeModalBtn" aria-label="Закрыть">✕</button>
+      <h2 class="form-title" style="font-size:2.3rem; margin-bottom:6px;" id="modalTitle">Заявка</h2>
+      <div class="modal-fields">
+        <div class="modal-field"><strong>Дата</strong><div id="modalDate">—</div></div>
+        <div class="modal-field"><strong>Никнейм</strong><div id="modalNickname">—</div></div>
+        <div class="modal-field"><strong>Discord</strong><div id="modalDiscord">—</div></div>
+        <div class="modal-field"><strong>Возраст</strong><div id="modalAge">—</div></div>
+        <div class="modal-field"><strong>Часовой пояс</strong><div id="modalTimezone">—</div></div>
+        <div class="modal-field"><strong>Опыт</strong><div id="modalExperience">—</div></div>
+        <div class="modal-field"><strong>Причина вступления</strong><div id="modalReason" style="white-space:pre-wrap;">—</div></div>
+        <div class="modal-field"><strong>Статус</strong><div id="modalStatus">—</div></div>
       </div>
 
-      <div class="admin-modal-field">
-        <span class="admin-modal-label">Никнейм (IGN)</span>
-        <div class="admin-modal-value" id="modalNickname">—</div>
-      </div>
-
-      <div class="admin-modal-field">
-        <span class="admin-modal-label">Discord</span>
-        <div class="admin-modal-value" id="modalDiscord">—</div>
-      </div>
-
-      <div class="admin-modal-field">
-        <span class="admin-modal-label">Возраст</span>
-        <div class="admin-modal-value" id="modalAge">—</div>
-      </div>
-
-      <div class="admin-modal-field">
-        <span class="admin-modal-label">Часовой пояс</span>
-        <div class="admin-modal-value" id="modalTimezone">—</div>
-      </div>
-
-      <div class="admin-modal-field">
-        <span class="admin-modal-label">Опыт в GTA 5 RP</span>
-        <div class="admin-modal-value" id="modalExperience">—</div>
-      </div>
-
-      <div class="admin-modal-field">
-        <span class="admin-modal-label">Причина вступления</span>
-        <div class="admin-modal-value" id="modalReason" style="white-space: pre-wrap;">—</div>
-      </div>
-
-      <div class="admin-modal-field">
-        <span class="admin-modal-label">Статус</span>
-        <div class="admin-modal-value" id="modalStatus">—</div>
-      </div>
-
-      <div class="reject-reason" id="rejectBlock">
-        <span class="reject-reason-label">Причина отказа</span>
-        <select id="rejectSelect">
-          <option value="">Выберите причину...</option>
+      <div class="reject-box" id="rejectBox">
+        <select class="select" id="rejectSelect">
+          <option value="">Выберите причину отказа</option>
           <option value="Неполные данные">Неполные данные</option>
-          <option value="Не соответствует требованиям по возрасту">Не соответствует требованиям по возрасту</option>
+          <option value="Не подходит по возрасту">Не подходит по возрасту</option>
           <option value="Недостаточно опыта">Недостаточно опыта</option>
-          <option value="Подозрительный аккаунт">Подозрительный аккаунт</option>
+          <option value="Не подходит по вайбу состава">Не подходит по вайбу состава</option>
           <option value="Другое">Другое</option>
         </select>
-        <textarea id="rejectCustom" placeholder="Укажите причину..." style="display:none"></textarea>
-        <button class="btn-reject" id="confirmRejectBtn" style="width:100%; margin-top:0.5rem">Подтвердить отказ</button>
+        <textarea class="textarea" id="rejectCustom" placeholder="Своя причина" style="display:none;"></textarea>
+        <button class="btn btn-secondary" id="confirmRejectBtn" type="button">Подтвердить отказ</button>
       </div>
 
-      <div class="admin-modal-actions" id="modalActions">
-        <button class="admin-btn-accept" id="approveBtn">✅ Принять</button>
-        <button class="admin-btn-reject" id="rejectBtn">❌ Отклонить</button>
-        <button class="admin-btn-delete" id="deleteBtn">🗑 Удалить</button>
+      <div class="modal-actions" id="modalActions">
+        <button class="btn btn-primary" id="approveBtn" type="button">Принять</button>
+        <button class="btn btn-secondary" id="rejectBtn" type="button">Отклонить</button>
+        <button class="btn btn-ghost" id="deleteBtn" type="button">Удалить</button>
       </div>
     </div>
   </div>
 
   <div class="notification" id="notification"></div>
 
+  <script src="app.js"></script>
   <script src="webhook.js"></script>
   <script>
     const ADMIN_PASS = 'royce2024';
     const APPLICATIONS_KEY = 'royce_applications';
 
+    const loginScreen = document.getElementById('loginScreen');
+    const adminPanel = document.getElementById('adminPanel');
+    const loginForm = document.getElementById('loginForm');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const notification = document.getElementById('notification');
+
+    const modal = document.getElementById('applicationModal');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalDate = document.getElementById('modalDate');
+    const modalNickname = document.getElementById('modalNickname');
+    const modalDiscord = document.getElementById('modalDiscord');
+    const modalAge = document.getElementById('modalAge');
+    const modalTimezone = document.getElementById('modalTimezone');
+    const modalExperience = document.getElementById('modalExperience');
+    const modalReason = document.getElementById('modalReason');
+    const modalStatus = document.getElementById('modalStatus');
+    const rejectBox = document.getElementById('rejectBox');
+    const rejectSelect = document.getElementById('rejectSelect');
+    const rejectCustom = document.getElementById('rejectCustom');
+
     let applications = [];
     let currentFilter = 'all';
     let currentApplicationId = null;
 
-    // --- AUTH ---
-    const loginScreen = document.getElementById('loginScreen');
-    const adminPanel = document.getElementById('adminPanel');
-    const loginForm = document.getElementById('loginForm');
-
-    function checkSession() {
-      if (sessionStorage.getItem('admin_auth') === 'true') {
-        loginScreen.style.display = 'none';
-        adminPanel.style.display = 'block';
-        loadApplications();
-      } else {
-        loginScreen.style.display = 'flex';
-        adminPanel.style.display = 'none';
-      }
+    function showNotification(message, isError = false) {
+      notification.textContent = message;
+      notification.className = 'notification show' + (isError ? ' error' : '');
+      setTimeout(() => notification.classList.remove('show', 'error'), 3200);
     }
 
-    loginForm.addEventListener('submit', (e) => {
-      e.preventDefault();
+    function getExperienceLabel(value) {
+      const map = {
+        newbie: 'Новичок',
+        intermediate: 'Есть опыт',
+        experienced: 'Опытный игрок',
+        veteran: 'Ветеран RP'
+      };
+      return map[value] || value || '—';
+    }
+
+    function getStatusLabel(value) {
+      const map = {
+        pending: 'Новая',
+        approved: 'Принята',
+        rejected: 'Отклонена'
+      };
+      return map[value] || value || '—';
+    }
+
+    function escapeHtml(value) {
+      const div = document.createElement('div');
+      div.textContent = value || '';
+      return div.innerHTML;
+    }
+
+    function checkSession() {
+      const isAuthed = sessionStorage.getItem('admin_auth') === 'true';
+      loginScreen.style.display = isAuthed ? 'none' : 'block';
+      adminPanel.classList.toggle('show', isAuthed);
+      if (isAuthed) loadApplications();
+    }
+
+    loginForm.addEventListener('submit', (event) => {
+      event.preventDefault();
       const pass = document.getElementById('adminPassword').value;
       if (pass === ADMIN_PASS) {
         sessionStorage.setItem('admin_auth', 'true');
-    checkSession();
-
-    // Tab switching
-    document.querySelectorAll('.admin-tab').forEach(tab => {
-      tab.addEventListener('click', () => {
-        document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
-        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-        tab.classList.add('active');
-        document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
-      });
-    });
+        checkSession();
       } else {
         showNotification('Неверный пароль', true);
       }
     });
 
-    document.getElementById('logoutBtn').addEventListener('click', () => {
+    logoutBtn.addEventListener('click', () => {
       sessionStorage.removeItem('admin_auth');
       checkSession();
     });
 
-    // --- APPLICATIONS ---
     function loadApplications() {
       const stored = localStorage.getItem(APPLICATIONS_KEY);
       applications = stored ? JSON.parse(stored) : [];
       applications.sort((a, b) => new Date(b.date) - new Date(a.date));
-      renderTable();
       updateStats();
+      renderTable();
     }
 
     function saveApplications() {
       localStorage.setItem(APPLICATIONS_KEY, JSON.stringify(applications));
     }
 
-    function filterApplications(status) {
-      currentFilter = status;
-      document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
-      document.querySelector(`.filter-tab[data-filter="${status}"]`).classList.add('active');
-      renderTable();
+    function updateStats() {
+      document.getElementById('statTotal').textContent = applications.length;
+      document.getElementById('statPending').textContent = applications.filter(item => item.status === 'pending').length;
+      document.getElementById('statApproved').textContent = applications.filter(item => item.status === 'approved').length;
+      document.getElementById('statRejected').textContent = applications.filter(item => item.status === 'rejected').length;
     }
 
     function renderTable() {
       const tbody = document.getElementById('applicationsTable');
       const emptyState = document.getElementById('emptyState');
+      const filtered = currentFilter === 'all' ? applications : applications.filter(item => item.status === currentFilter);
 
-      const filtered = currentFilter === 'all'
-        ? applications
-        : applications.filter(a => a.status === currentFilter);
-
-      if (filtered.length === 0) {
+      if (!filtered.length) {
         tbody.innerHTML = '';
         emptyState.style.display = 'block';
         return;
       }
 
       emptyState.style.display = 'none';
-      tbody.innerHTML = filtered.map(app => `
-        <tr onclick='openApplicationModal(${app.id})'>
-          <td>${new Date(app.date).toLocaleString('ru-RU')}</td>
-          <td>${escapeHtml(app.nickname)}</td>
-          <td>${escapeHtml(app.discord)}</td>
-          <td>${app.age}</td>
-          <td>${getExperienceLabel(app.experience)}</td>
-          <td><span class="status-badge ${app.status}">${getStatusLabel(app.status)}</span></td>
+      tbody.innerHTML = filtered.map(item => `
+        <tr data-id="${item.id}">
+          <td>${new Date(item.date).toLocaleString('ru-RU')}</td>
+          <td>${escapeHtml(item.nickname)}</td>
+          <td>${escapeHtml(item.discord)}</td>
+          <td>${item.age}</td>
+          <td>${getExperienceLabel(item.experience)}</td>
+          <td><span class="status-badge ${item.status}">${getStatusLabel(item.status)}</span></td>
         </tr>
       `).join('');
+
+      tbody.querySelectorAll('tr').forEach(row => {
+        row.addEventListener('click', () => openApplicationModal(Number(row.dataset.id)));
+      });
     }
 
-    function updateStats() {
-      const total = applications.length;
-      const pending = applications.filter(a => a.status === 'pending').length;
-      const approved = applications.filter(a => a.status === 'approved').length;
-      const rejected = applications.filter(a => a.status === 'rejected').length;
-
-      document.getElementById('statTotal').textContent = total;
-      document.getElementById('statPending').textContent = pending;
-      document.getElementById('statApproved').textContent = approved;
-      document.getElementById('statRejected').textContent = rejected;
-    }
-
-    // --- MODAL ---
-    function openApplicationModal(id) {
-      const app = applications.find(a => a.id === id);
-      if (!app) return;
-
-      currentApplicationId = id;
-
-      document.getElementById('modalTitle').textContent = `Заявка — ${app.nickname}`;
-      document.getElementById('modalDate').textContent = new Date(app.date).toLocaleString('ru-RU');
-      document.getElementById('modalNickname').textContent = app.nickname;
-      document.getElementById('modalDiscord').textContent = app.discord;
-      document.getElementById('modalAge').textContent = app.age;
-      document.getElementById('modalTimezone').textContent = app.timezone;
-      document.getElementById('modalExperience').textContent = getExperienceLabel(app.experience);
-      document.getElementById('modalReason').textContent = app.reason;
-      document.getElementById('modalStatus').innerHTML = `<span class="status-badge ${app.status}">${getStatusLabel(app.status)}</span>`;
-
-      const rejectBlock = document.getElementById('rejectBlock');
-      const modalActions = document.getElementById('modalActions');
-      const rejectBtn = document.getElementById('rejectBtn');
-      const approveBtn = document.getElementById('approveBtn');
-      const deleteBtn = document.getElementById('deleteBtn');
-
-      rejectBlock.classList.remove('show');
-      document.getElementById('rejectSelect').value = '';
-      document.getElementById('rejectCustom').style.display = 'none';
-      document.getElementById('rejectCustom').value = '';
-
-      if (app.status === 'pending') {
-        modalActions.style.display = 'flex';
-        approveBtn.style.display = 'block';
-        rejectBtn.style.display = 'block';
-        deleteBtn.style.display = 'block';
-      } else {
-        modalActions.style.display = 'none';
-      }
-
-      document.getElementById('applicationModal').classList.add('open');
-    }
-
-    window.closeModal = function(e) {
-      if (e.target === document.getElementById('applicationModal')) {
-        document.getElementById('applicationModal').classList.remove('open');
-      }
-    };
-
-    window.closeModalDirect = function() {
-      document.getElementById('applicationModal').classList.remove('open');
-    };
-
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') {
-        document.getElementById('applicationModal').classList.remove('open');
-      }
+    document.querySelectorAll('#filterTabs .filter-btn').forEach(button => {
+      button.addEventListener('click', () => {
+        document.querySelectorAll('#filterTabs .filter-btn').forEach(item => item.classList.remove('active'));
+        button.classList.add('active');
+        currentFilter = button.dataset.filter;
+        renderTable();
+      });
     });
 
-    // --- ACTIONS ---
-    document.getElementById('approveBtn').addEventListener('click', async () => {
-      if (!currentApplicationId) return;
-      const app = applications.find(a => a.id === currentApplicationId);
+    function openApplicationModal(id) {
+      const app = applications.find(item => item.id === id);
       if (!app) return;
+      currentApplicationId = id;
 
-      const success = await sendApprovalNotification(app.discord, app.nickname);
-      if (success) {
-        app.status = 'approved';
-        saveApplications();
-        loadApplications();
-        closeModalDirect();
-        showNotification('Заявка одобрена, ссылка отправлена!');
-      } else {
-        showNotification('Ошибка отправки уведомления', true);
+      modalTitle.textContent = `Заявка — ${app.nickname}`;
+      modalDate.textContent = new Date(app.date).toLocaleString('ru-RU');
+      modalNickname.textContent = app.nickname;
+      modalDiscord.textContent = app.discord;
+      modalAge.textContent = app.age;
+      modalTimezone.textContent = app.timezone;
+      modalExperience.textContent = getExperienceLabel(app.experience);
+      modalReason.textContent = app.reason;
+      modalStatus.innerHTML = `<span class="status-badge ${app.status}">${getStatusLabel(app.status)}</span>`;
+
+      rejectBox.classList.remove('show');
+      rejectSelect.value = '';
+      rejectCustom.value = '';
+      rejectCustom.style.display = 'none';
+
+      const actionsVisible = app.status === 'pending';
+      document.getElementById('modalActions').style.display = actionsVisible ? 'flex' : 'none';
+
+      modal.classList.add('open');
+    }
+
+    function closeModal() {
+      modal.classList.remove('open');
+      currentApplicationId = null;
+    }
+
+    document.getElementById('closeModalBtn').addEventListener('click', closeModal);
+    modal.addEventListener('click', (event) => {
+      if (event.target === modal) closeModal();
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') closeModal();
+    });
+
+    document.getElementById('approveBtn').addEventListener('click', async () => {
+      const app = applications.find(item => item.id === currentApplicationId);
+      if (!app) return;
+      const ok = await window.sendApprovalNotification(app.discord, app.nickname);
+      if (!ok) {
+        showNotification('Не удалось отправить уведомление в Discord', true);
+        return;
       }
+      app.status = 'approved';
+      saveApplications();
+      loadApplications();
+      closeModal();
+      showNotification('Заявка одобрена');
     });
 
     document.getElementById('rejectBtn').addEventListener('click', () => {
-      document.getElementById('rejectBlock').classList.add('show');
+      rejectBox.classList.add('show');
     });
 
-    document.getElementById('rejectSelect').addEventListener('change', (e) => {
-      const custom = document.getElementById('rejectCustom');
-      custom.style.display = e.target.value === 'Другое' ? 'block' : 'none';
+    rejectSelect.addEventListener('change', () => {
+      rejectCustom.style.display = rejectSelect.value === 'Другое' ? 'block' : 'none';
     });
 
     document.getElementById('confirmRejectBtn').addEventListener('click', async () => {
-      if (!currentApplicationId) return;
-      const app = applications.find(a => a.id === currentApplicationId);
+      const app = applications.find(item => item.id === currentApplicationId);
       if (!app) return;
 
-      const reasonSelect = document.getElementById('rejectSelect').value;
-      const customReason = document.getElementById('rejectCustom').value.trim();
-      const reason = reasonSelect === 'Другое' ? customReason : reasonSelect;
-
+      const reason = rejectSelect.value === 'Другое' ? rejectCustom.value.trim() : rejectSelect.value;
       if (!reason) {
-        showNotification('Укажите причину отказа', true);
+        showNotification('Выбери причину отказа', true);
         return;
       }
 
-      const success = await sendRejectionNotification(app.discord, reason);
-      if (success) {
-        app.status = 'rejected';
-        saveApplications();
-        loadApplications();
-        closeModalDirect();
-        showNotification('Заявка отклонена');
-      } else {
-        showNotification('Ошибка отправки уведомления', true);
+      const ok = await window.sendRejectionNotification(app.discord, reason);
+      if (!ok) {
+        showNotification('Не удалось отправить уведомление в Discord', true);
+        return;
       }
+
+      app.status = 'rejected';
+      app.rejectReason = reason;
+      saveApplications();
+      loadApplications();
+      closeModal();
+      showNotification('Заявка отклонена');
     });
 
     document.getElementById('deleteBtn').addEventListener('click', () => {
       if (!currentApplicationId) return;
-      if (confirm('Удалить заявку навсегда?')) {
-        applications = applications.filter(a => a.id !== currentApplicationId);
-        saveApplications();
-        loadApplications();
-        closeModalDirect();
-        showNotification('Заявка удалена');
-      }
+      if (!confirm('Удалить заявку навсегда?')) return;
+      applications = applications.filter(item => item.id !== currentApplicationId);
+      saveApplications();
+      loadApplications();
+      closeModal();
+      showNotification('Заявка удалена');
     });
 
-    document.querySelectorAll('.filter-tab').forEach(tab => {
-      tab.addEventListener('click', () => filterApplications(tab.dataset.filter));
-    });
-
-    // --- NOTIFICATIONS ---
-    function showNotification(msg, isError = false) {
-      const el = document.getElementById('notification');
-      el.textContent = msg;
-      el.className = 'notification show' + (isError ? ' error' : '');
-      setTimeout(() => el.classList.remove('show'), 3000);
-    }
-
-    function escapeHtml(str) {
-      const div = document.createElement('div');
-      div.textContent = str;
-      return div.innerHTML;
-    }
-
-    function getStatusLabel(status) {
-      const labels = { pending: 'Новая', approved: 'Принята', rejected: 'Отклонена' };
-      return labels[status] || status;
-    }
-
-    function getExperienceLabel(val) {
-      const map = {
-        'newbie': 'Новичок',
-        'intermediate': 'Есть опыт',
-        'experienced': 'Опытный игрок',
-        'veteran': 'Ветеран RP'
-      };
-      return map[val] || val;
-    }
-
-    // --- INIT ---
     checkSession();
   </script>
 </body>

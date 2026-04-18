@@ -1,164 +1,87 @@
-// Discord Webhook — отправка заявок на сервер
 const DISCORD_WEBHOOK = 'https://discord.com/api/webhooks/1495157365560053902/TgfSxctBsJWCbXSoYCCueQjaLfHZIraEGL5Jxxgahr6JOcqKZBDxS-9jjTOLCfDQBsMS';
 
-/**
- * Отправляет заявку в Discord через webhook
- */
-async function sendToDiscord(application) {
-  if (!DISCORD_WEBHOOK) {
-    console.warn('Discord webhook URL не задан');
+function getExperienceLabel(value) {
+  const map = {
+    newbie: 'Новичок (меньше месяца)',
+    intermediate: 'Есть опыт (1–6 месяцев)',
+    experienced: 'Опытный игрок (6+ месяцев)',
+    veteran: 'Ветеран RP'
+  };
+  return map[value] || value || '—';
+}
+
+async function postEmbed(embed) {
+  if (!DISCORD_WEBHOOK) return false;
+
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 10000);
+
+  try {
+    const response = await fetch(DISCORD_WEBHOOK, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ embeds: [embed] }),
+      signal: controller.signal
+    });
+
+    clearTimeout(timeoutId);
+    if (!response.ok) {
+      console.error('Discord webhook error:', response.status, response.statusText);
+      return false;
+    }
+    return true;
+  } catch (error) {
+    clearTimeout(timeoutId);
+    console.error('Discord webhook fetch failed:', error);
     return false;
   }
+}
 
+window.sendToDiscord = async function sendToDiscord(application) {
   const embed = {
     title: '📄 Новая заявка — ROYCE FAMILY',
-    color: 0x00ff9f,
+    color: 0xc9a85d,
     timestamp: new Date().toISOString(),
     footer: { text: 'ROYCE FAMILY — Система заявок' },
     fields: [
-      { name: '🎮 Никнейм (IGN)', value: application.nickname || '—', inline: true },
+      { name: '🎮 Никнейм', value: application.nickname || '—', inline: true },
       { name: '💬 Discord', value: application.discord || '—', inline: true },
       { name: '🎂 Возраст', value: String(application.age || '—'), inline: true },
       { name: '🕐 Часовой пояс', value: application.timezone || '—', inline: true },
-      { name: '⭐ Опыт в GTA 5 RP', value: getExperienceLabel(application.experience) || '—', inline: false },
+      { name: '⭐ Опыт', value: getExperienceLabel(application.experience), inline: false },
       { name: '📝 Причина вступления', value: application.reason || '—', inline: false }
     ]
   };
 
-  return await postEmbed(embed);
-}
+  return postEmbed(embed);
+};
 
-/**
- * Отправляет уведомление об одобрении заявки
- */
-async function sendApprovalNotification(discordTag, nickname) {
-  if (!DISCORD_WEBHOOK) return false;
-
+window.sendApprovalNotification = async function sendApprovalNotification(discordTag, nickname) {
   const embed = {
     title: '✅ Заявка одобрена — ROYCE FAMILY',
-    color: 0x00ff9f,
-    description: `Пользователь **${nickname}** был принят в семью!\n\n** discord:** ${discordTag}\n** Ссылка на сервер:** https://discord.gg/royce`,
+    color: 0x37c6a0,
+    description: `Пользователь **${nickname}** был принят в семью.\n\nDiscord: **${discordTag}**`,
     timestamp: new Date().toISOString(),
     footer: { text: 'ROYCE FAMILY — Система заявок' }
   };
+  return postEmbed(embed);
+};
 
-  return await postEmbed(embed);
-}
-
-/**
- * Отправляет уведомление об отклонении заявки
- */
-async function sendRejectionNotification(discordTag, reason) {
-  if (!DISCORD_WEBHOOK) return false;
-
+window.sendRejectionNotification = async function sendRejectionNotification(discordTag, reason) {
   const embed = {
     title: '❌ Заявка отклонена — ROYCE FAMILY',
-    color: 0xff3a3a,
-    description: `К сожалению, ваша заявка была отклонена.\n\n**Причина:** ${reason}\n\nВы можете подать заявку повторно через некоторое время.`,
+    color: 0xff6f6f,
+    description: `Discord: **${discordTag}**\nПричина: **${reason}**`,
     timestamp: new Date().toISOString(),
     footer: { text: 'ROYCE FAMILY — Система заявок' }
   };
+  return postEmbed(embed);
+};
 
-  return await postEmbed(embed);
-}
-
-/**
- * Универсальный метод отправки embed в Discord
- */
-async function postEmbed(embed) {
-  const payload = { embeds: [embed] };
-
-  try {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 10000);
-
-    const response = await fetch(DISCORD_WEBHOOK, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
-      signal: controller.signal
-    });
-    clearTimeout(timeoutId);
-
-    if (!response.ok) {
-      console.error('Discord webhook error:', response.status, response.statusText);
-      return false;
-    }
-    return true;
-  } catch (error) {
-    if (error.name === 'AbortError') {
-      console.error('Discord webhook timeout (10s)');
-    } else {
-      console.error('Discord webhook fetch failed:', error);
-    }
-    return false;
-  }
-}
-
-// Хелперы
-function getExperienceLabel(val) {
-  const map = {
-    'newbie': 'Новичок (меньше месяца)',
-    'intermediate': 'Есть опыт (1-6 месяцев)',
-    'experienced': 'Опытный игрок (6+ месяцев)',
-    'veteran': 'Ветеран RP'
-  };
-  return map[val] || val;
-}
-
-// Экспорт для Node.js (если needed)
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { sendToDiscord, sendApprovalNotification, sendRejectionNotification };
-}
-
-  const embed = {
-    title: '📄 Новая заявка — ROYCE FAMILY',
-    color: 0x00ff9f,
-    timestamp: new Date().toISOString(),
-    footer: {
-      text: 'ROYCE FAMILY — Система заявок',
-      icon_url: 'https://cdn.discordapp.com/emojis/...' // опционально
-    },
-    fields: [
-      { name: '🎮 Никнейм (IGN)', value: application.ign || '—', inline: true },
-      { name: '💬 Discord', value: application.discord || '—', inline: true },
-      { name: '🎂 Возраст', value: String(application.age || '—'), inline: true },
-      { name: '🕐 Часовой пояс', value: application.timezone || '—', inline: true },
-      { name: '⭐ Опыт в GTA 5 RP', value: application.experience || '—', inline: false },
-      { name: '📝 Причина вступления', value: application.motivation || '—', inline: false }
-    ]
+  module.exports = {
+    sendToDiscord: window.sendToDiscord,
+    sendApprovalNotification: window.sendApprovalNotification,
+    sendRejectionNotification: window.sendRejectionNotification
   };
-
-  const payload = { embeds: [embed] };
-
-  try {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 сек таймаут
-
-    const response = await fetch(DISCORD_WEBHOOK, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
-      signal: controller.signal
-    });
-    clearTimeout(timeoutId);
-
-    if (!response.ok) {
-      console.error('Discord webhook error:', response.status, response.statusText);
-      return false;
-    }
-    return true;
-  } catch (error) {
-    if (error.name === 'AbortError') {
-      console.error('Discord webhook timeout (10s)');
-    } else {
-      console.error('Discord webhook fetch failed:', error);
-    }
-    return false;
-  }
-}
-
-// Экспорт для use в других модулях (если needed)
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { sendToDiscord };
 }
