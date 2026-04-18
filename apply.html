@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Заявка — ROYCE FAMILY</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .apply-section { min-height: 80vh; display: flex; align-items: center; justify-content: center; padding: 4rem 2rem; }
+    .apply-form {
+      background: #0d1117; border: 1px solid rgba(0,255,159,.15); border-left: 3px solid #00ff9f;
+      padding: 2rem; max-width: 600px; width: 100%; margin: 0 auto;
+    }
+    .apply-title {
+      font-family: 'Orbitron', monospace; font-size: 1.8rem; font-weight: 900; color: #fff;
+      letter-spacing: 3px; margin-bottom: 0.5rem; text-align: center;
+    }
+    .apply-subtitle {
+      font-family: 'Share Tech Mono', monospace; font-size: .75rem; color: #00ff9f;
+      letter-spacing: 2px; text-align: center; margin-bottom: 2rem;
+    }
+    .form-group { margin-bottom: 1.5rem; }
+    .form-label {
+      display: block; font-family: 'Share Tech Mono', monospace; font-size: .75rem;
+      color: #00ff9f; letter-spacing: 2px; margin-bottom: 0.5rem; text-transform: uppercase;
+    }
+    .form-input, .form-textarea, .form-select {
+      width: 100%; padding: 0.9rem 1rem; background: #161b22; border: 1px solid rgba(0,255,159,.2);
+      border-top: 1px solid rgba(0,255,159,.4); color: #c8d8e4; font-family: 'Rajdhani', sans-serif;
+      font-size: 1rem; outline: none; transition: border-color .2s, box-shadow .2s; border-radius: 2px;
+    }
+    .form-input:focus, .form-textarea:focus, .form-select:focus { border-color: #00ff9f; box-shadow: 0 0 0 2px rgba(0,255,159,.1); }
+    .form-textarea { min-height: 120px; resize: vertical; }
+    .form-select { cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2300ff9f' d='M6 8L1 3h10z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 1rem center; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    @media (max-width: 500px) { .form-row { grid-template-columns: 1fr; } }
+    .btn-submit {
+      width: 100%; padding: 1rem; font-family: 'Rajdhani', sans-serif; font-weight: 700;
+      font-size: 1rem; letter-spacing: 2px; background: rgba(0,255,159,.15); border: 1px solid rgba(0,255,159,.4);
+      color: #00ff9f; border-radius: 2px; cursor: pointer; transition: all .3s; margin-top: 1rem;
+    }
+    .btn-submit:hover { background: rgba(0,255,159,.25); color: #fff; }
+    .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+    .char-counter {
+      font-family: 'Share Tech Mono', monospace; font-size: 0.7rem; color: #6b7c8f;
+      text-align: right; margin-top: 0.3rem; letter-spacing: 1px;
+    }
+    .char-counter.warning { color: #ffc107; }
+    .char-counter.danger { color: #ff3a3a; }
+
+    .form-checkbox-wrap {
+      display: flex; align-items: center; gap: 0.7rem; cursor: pointer; margin-top: 1rem;
+    }
+    .form-checkbox { position: absolute; opacity: 0; width: 0; height: 0; }
+    .checkbox-custom {
+      width: 20px; height: 20px; border: 1px solid rgba(0,255,159,.3);
+      border-radius: 2px; background: #161b22; position: relative; transition: all .2s;
+      flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+    }
+    .form-checkbox:checked + .checkbox-custom { background: rgba(0,255,159,.15); border-color: #00ff9f; }
+    .form-checkbox:checked + .checkbox-custom::after {
+      content: '✓'; color: #00ff9f; font-size: 0.9rem; font-weight: 700;
+    }
+    .form-checkbox:focus + .checkbox-custom { border-color: #00ff9f; box-shadow: 0 0 0 2px rgba(0,255,159,.2); }
+    .checkbox-label {
+      font-family: 'Rajdhani', sans-serif; font-size: 0.95rem; color: #c8d8e4; letter-spacing: 0.5px;
+    }
+
+    .success-message {
+      text-align: center; padding: 2rem; background: rgba(0,255,159,.1); border: 1px solid rgba(0,255,159,.3);
+      border-top: 2px solid #00ff9f; display: none;
+    }
+    .success-message.show { display: block; }
+    .success-icon { font-size: 3rem; display: block; margin-bottom: 1rem; }
+    .success-title {
+      font-family: 'Orbitron', monospace; font-size: 1.4rem; font-weight: 900; color: #fff;
+      letter-spacing: 2px; margin-bottom: 0.5rem;
+    }
+    .success-text { color: #6b7c8f; margin-bottom: 1.5rem; }
+    .back-link {
+      display: inline-block; font-family: 'Share Tech Mono', monospace; font-size: .8rem;
+      color: #6b7c8f; transition: color .2s;
+    }
+    .back-link:hover { color: #00ff9f; }
+
+    .error-toast {
+      position: fixed; top: 80px; right: 20px; z-index: 10001;
+      background: rgba(255,58,58,.1); border: 1px solid rgba(255,58,58,.3); border-left: 3px solid #ff3a3a;
+      padding: 1rem 1.5rem; color: #ff3a3a; font-family: 'Share Tech Mono', monospace;
+      font-size: 0.8rem; border-radius: 2px; display: none; animation: slideIn 0.3s ease;
+    }
+    .error-toast.show { display: block; }
+    @keyframes slideIn {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bg-grid"></div>
+
+  <nav class="navbar">
+    <a href="index.html" class="nav-logo">ROYCE<span>&nbsp;FAMILY</span></a>
+    <button class="nav-toggle" id="navToggle"><span></span><span></span><span></span></button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html">Главная</a></li>
+      <li><a href="index.html#about">О нас</a></li>
+      <li><a href="index.html#partners">Медиа</a></li>
+      <li><a href="apply.html" class="nav-cta active">Вступить</a></li>
+    </ul>
+  </nav>
+
+  <div class="apply-section">
+    <div class="apply-form">
+      <div class="apply-title">ВСТУПИТЬ В СЕМЬЮ</div>
+      <div class="apply-subtitle">// ЗАЯВКА //</div>
+
+      <form id="applicationForm">
+        <div class="form-group">
+          <label class="form-label" for="nickname">Никнейм в игре *</label>
+          <input type="text" id="nickname" class="form-input" placeholder="Ваш игровой никнейм" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="discord">Discord тег *</label>
+          <input type="text" id="discord" class="form-input" placeholder="username или user#1234" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="age">Возраст *</label>
+          <input type="number" id="age" class="form-input" min="14" max="99" placeholder="18" required>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="timezone">Часовой пояс</label>
+            <select id="timezone" class="form-select">
+              <option value="MSK-1">МСК-1 (Калининград)</option>
+              <option value="MSK">МСК (Москва)</option>
+              <option value="MSK+1">МСК+1 (Самара)</option>
+              <option value="MSK+2">МСК+2 (Екатеринбург)</option>
+              <option value="MSK+3">МСК+3 (Омск)</option>
+              <option value="MSK+4">МСК+4 (Красноярск)</option>
+              <option value="MSK+5">МСК+5 (Иркутск)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="experience">Опыт в GTA 5 RP</label>
+            <select id="experience" class="form-select">
+              <option value="newbie">Новичок (меньше месяца)</option>
+              <option value="intermediate">Есть опыт (1-6 месяцев)</option>
+              <option value="experienced">Опытный игрок (6+ месяцев)</option>
+              <option value="veteran">Ветеран RP</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="reason">Почему хочешь вступить? *</label>
+          <textarea id="reason" class="form-textarea" maxlength="500" placeholder="Расскажи о себе и своих целях..." required></textarea>
+          <div class="char-counter"><span id="charCount">0</span>/500</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-checkbox-wrap">
+            <input type="checkbox" id="rules" class="form-checkbox" required>
+            <span class="checkbox-custom"></span>
+            <span class="checkbox-label">Я согласен с правилами семьи и сервера *</span>
+          </label>
+        </div>
+
+        <button type="submit" class="btn-submit" id="submitBtn">ОТПРАВИТЬ ЗАЯВКУ</button>
+      </form>
+
+      <div class="success-message" id="successMessage">
+        <div class="success-icon">✅</div>
+        <div class="success-title">ЗАЯВКА ОТПРАВЛЕНА</div>
+        <p class="success-text">Мы рассмотрим её и свяжемся с тобой в Discord</p>
+        <a href="index.html" class="back-link">← Вернуться на главную</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="error-toast" id="errorToast"></div>
+
+  <footer class="footer">
+    <div class="footer-logo">ROYCE FAMILY</div>
+    <div class="footer-text">© 2024 · GTA 5 RP · Los Santos · <a href="admin.html">ADMIN</a></div>
+  </footer>
+
+  <script src="webhook.js"></script>
+  <script>
+    const form = document.getElementById('applicationForm');
+    const successMsg = document.getElementById('successMessage');
+    const submitBtn = document.getElementById('submitBtn');
+    const reasonTextarea = document.getElementById('reason');
+    const charCount = document.getElementById('charCount');
+    const errorToast = document.getElementById('errorToast');
+
+    // Счётчик символов
+    reasonTextarea.addEventListener('input', () => {
+      const count = reasonTextarea.value.length;
+      charCount.textContent = count;
+      charCount.className = 'char-counter';
+      if (count > 450) charCount.classList.add('danger');
+      else if (count > 400) charCount.classList.add('warning');
+    });
+
+    // Показ ошибки
+    function showError(message) {
+      errorToast.textContent = message;
+      errorToast.classList.add('show');
+      setTimeout(() => errorToast.classList.remove('show'), 4000);
+    }
+
+    // Валидация формы
+    function validateForm() {
+      const nickname = document.getElementById('nickname').value.trim();
+      const discord = document.getElementById('discord').value.trim();
+      const age = parseInt(document.getElementById('age').value);
+      const reason = document.getElementById('reason').value.trim();
+      const rules = document.getElementById('rules').checked;
+
+      if (!nickname) { showError('Введите никнейм'); return false; }
+      if (!discord) { showError('Введите Discord тег'); return false; }
+      if (isNaN(age) || age < 14 || age > 99) { showError('Возраст должен быть от 14 до 99'); return false; }
+      if (!reason) { showError('Расскажите, почему хотите вступить'); return false; }
+      if (!rules) { showError('Согласитесь с правилами'); return false; }
+
+      return true;
+    }
+
+    // Обработчик отправки
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      if (!validateForm()) return;
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'ОТПРАВКА...';
+
+      const application = {
+        id: Date.now(),
+        nickname: document.getElementById('nickname').value.trim(),
+        discord: document.getElementById('discord').value.trim(),
+        age: parseInt(document.getElementById('age').value),
+        timezone: document.getElementById('timezone').value,
+        experience: document.getElementById('experience').value,
+        reason: document.getElementById('reason').value.trim(),
+        status: 'pending',
+        date: new Date().toISOString()
+      };
+
+      try {
+        const success = await window.sendToDiscord(application);
+
+        if (success) {
+          // Сохраняем в localStorage
+          const applications = JSON.parse(localStorage.getItem('royce_applications') || '[]');
+          applications.push(application);
+          localStorage.setItem('royce_applications', JSON.stringify(applications));
+
+          form.style.display = 'none';
+          successMsg.classList.add('show');
+        } else {
+          showError('Ошибка отправки. Попробуйте позже.');
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'ОТПРАВИТЬ ЗАЯВКУ';
+        }
+      } catch (error) {
+        console.error('Submit error:', error);
+        showError('Сетевая ошибка. Проверьте подключение.');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'ОТПРАВИТЬ ЗАЯВКУ';
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ROYCE FAMILY — GTA 5 RP</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <div class="bg-grid"></div>
+
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
+    <a href="index.html" class="nav-logo">ROYCE<span>&nbsp;FAMILY</span></a>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links" id="navLinks" role="menubar">
+      <li role="none"><a href="index.html" class="active" role="menuitem">Главная</a></li>
+      <li role="none"><a href="#about" role="menuitem">О нас</a></li>
+      <li role="none"><a href="#partners" role="menuitem">Медиа</a></li>
+      <li role="none"><a href="apply.html" class="nav-cta" role="menuitem">Вступить</a></li>
+    </ul>
+  </nav>
+
+  <div class="page-wrap">
+    <section class="hero">
+      <div class="hero-bg"></div>
+      <div class="hero-content">
+        <div class="hero-tag">// GTA 5 ROLEPLAY //</div>
+        <h1 class="hero-title">
+          <span class="line1">ROYCE</span>
+          <span class="line2">FAMILY</span>
+        </h1>
+        <p class="hero-sub">
+          <span class="typing-text" id="heroTyping"></span>
+          <span class="typing-cursor"></span>
+        </p>
+        <div class="hero-btns">
+          <a href="apply.html" class="btn btn-primary">Вступить в семью</a>
+          <a href="#about" class="btn btn-outline">Узнать больше</a>
+        </div>
+      </div>
+      <div class="hero-city"></div>
+    </section>
+
+    <div class="section-divider" style="margin-top:4rem"></div>
+    
+    <section class="section" id="about">
+      <div class="section-header reveal">
+        <span class="section-tag">// 01 — О НАС //</span>
+        <h2 class="section-title">КТО МЫ ТАКИЕ</h2>
+        <div class="section-line"></div>
+      </div>
+      <div class="reveal" style="background:#0d1117;border:1px solid rgba(0,255,159,.15);border-left:3px solid #00ff9f;padding:2rem 2.5rem;margin-bottom:2.5rem;">
+        <div style="font-family:'Share Tech Mono',monospace;font-size:.68rem;letter-spacing:4px;color:#00ff9f;margin-bottom:1rem;">// О СЕМЬЕ //</div>
+        <p style="font-size:1.08rem;line-height:1.9;color:#c8d8e4;">Мы — <span style="color:#00ff9f;font-weight:700;">семья Royce</span>. Не просто группа игроков, а настоящее братство, которое живёт по своим правилам на улицах Los Santos. Каждый, кто попадает к нам, становится частью чего-то большего — общего дела, общей истории и общей судьбы.</p>
+      </div>
+      <div class="cards-grid">
+        <div class="card reveal"><span class="card-icon">⚔️</span><div class="card-title">Война семей</div><p class="card-text">Активные участники войны семей — захват территорий и уличные разборки.</p><div class="card-corner"></div></div>
+        <div class="card reveal"><span class="card-icon">🎭</span><div class="card-title">РП Контент</div><p class="card-text">Создаём качественный ролевой контент: сходки, криминальные схемы, переговоры.</p><div class="card-corner"></div></div>
+        <div class="card reveal"><span class="card-icon">🤝</span><div class="card-title">Дружелюбный состав</div><p class="card-text">Новичкам всегда помогут разобраться. Никакого токсика — только уважение.</p><div class="card-corner"></div></div>
+        <div class="card reveal"><span class="card-icon">🏙️</span><div class="card-title">Свои территории</div><p class="card-text">Контролируем улицы, бизнес и ресурсы своей зоны в Los Santos.</p><div class="card-corner"></div></div>
+        <div class="card reveal"><span class="card-icon">📈</span><div class="card-title">Развитие персонажа</div><p class="card-text">Помогаем каждому развить персонажа и найти место в иерархии семьи.</p><div class="card-corner"></div></div>
+        <div class="card reveal"><span class="card-icon">🎙️</span><div class="card-title">Живое общение</div><p class="card-text">Discord сервер всегда активен — заходи, познакомься с составом.</p><div class="card-corner"></div></div>
+      </div>
+    </section>
+
+    <div class="section-divider"></div>
+    
+    <section class="section" id="partners">
+      <div class="section-header reveal">
+        <span class="section-tag">// 02 — МЕДИА //</span>
+        <h2 class="section-title">МЕДИА СЕМЬИ</h2>
+        <div class="section-line"></div>
+        <p style="color:#6b7c8f;margin-top:1rem;">Наши стримеры и ютуберы — нажми на карточку чтобы выбрать платформу</p>
+      </div>
+      <div class="media-grid reveal" id="mediaGrid" role="list" aria-label="Media personalities"></div>
+      <div style="text-align:center;margin-top:2rem;">
+        <span style="font-family:'Share Tech Mono',monospace;font-size:.65rem;color:#6b7c8f;">СТАТИСТИКА ОБНОВЛЯЕТСЯ АВТОМАТИЧЕСКИ &nbsp;·&nbsp; <span id="last-update-time">—</span></span>
+      </div>
+    </section>
+
+    <div class="section-divider"></div>
+    
+    <section class="section" style="text-align:center">
+      <div class="reveal">
+        <span class="section-tag">// ГОТОВ ВСТУПИТЬ? //</span>
+        <h2 class="section-title" style="margin-bottom:1.5rem">СТАНЬ ЧАСТЬЮ СЕМЬИ</h2>
+        <p style="color:#6b7c8f;max-width:500px;margin:0 auto 2.5rem;">Оставь заявку — и мы свяжемся с тобой для интервью.</p>
+        <a href="apply.html" class="btn btn-primary">Подать заявку</a>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="footer-logo">ROYCE FAMILY</div>
+      <div class="footer-text">© 2024 · GTA 5 RP · Los Santos · <a href="admin.html">ADMIN</a></div>
+    </footer>
+  </div>
+
+  <div id="platform-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-name" onclick="closeModal(event)">
+    <div class="modal-box">
+      <button class="modal-close" onclick="document.getElementById('platform-modal').classList.remove('open')" aria-label="Close modal">✕</button>
+      <div class="modal-avatar-wrap"><img id="modal-avatar" class="modal-avatar" alt="" src=""></div>
+      <div class="modal-name" id="modal-name"></div>
+      <div class="modal-desc" id="modal-desc"></div>
+      <div class="modal-btns" id="modal-btns" role="list"></div>
+    </div>
+  </div>
+
+  <script src="mock-api.js"></script>
+  <script>
+    // Мобильное меню с ARIA
+    const navToggle = document.getElementById('navToggle');
+    const navLinks = document.getElementById('navLinks');
+    navToggle.addEventListener('click', () => {
+      const isOpen = navLinks.classList.toggle('open');
+      navToggle.setAttribute('aria-expanded', isOpen);
+    });
+
+    // Закрытие меню по Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && navLinks.classList.contains('open')) {
+        navLinks.classList.remove('open');
+        navToggle.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    // Печатающий текст с курсором
+    const phrases = ['Добро пожаловать в Los Santos', 'Мы — семья, а не просто фракция', 'Твоё место в городе ждёт тебя'];
+    let pi = 0, ci = 0, del = false;
+    const el = document.getElementById('heroTyping');
+    function type() {
+      const p = phrases[pi];
+      if (!del) {
+        el.textContent = p.slice(0, ++ci);
+        if (ci === p.length) { del = true; setTimeout(type, 2200); return; }
+      } else {
+        el.textContent = p.slice(0, --ci);
+        if (ci === 0) { del = false; pi = (pi + 1) % phrases.length; }
+      }
+      setTimeout(type, del ? 38 : 65);
+    }
+    type();
+
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          obs.unobserve(e.target);
+        }
+      });
+    }, { threshold: .1 });
+    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+    // Загрузка медиа-партнёров из localStorage
+    function getMediaPartners() {
+      const saved = localStorage.getItem('royce_media');
+      if (saved) {
+        try { return JSON.parse(saved); } catch (e) { console.warn('Failed to parse media partners', e); }
+      }
+      const defaultMedia = {
+        loves65: { name: 'Loves65', avatar: 'https://unavatar.io/twitch/loves65', avatarFallback: 'https://ui-avatars.com/api/?name=L&background=00ff9f&color=000', desc: 'GTA 5 RP — стримит жизнь на сервере', twitch: 'https://www.twitch.tv/loves65', youtube: 'https://www.youtube.com/@Loves65' },
+        karapyzz: { name: 'Karapuzz69', avatar: 'https://unavatar.io/twitch/karapyzz69', avatarFallback: 'https://ui-avatars.com/api/?name=K&background=9146ff&color=fff', desc: 'GTA 5 RP — антисоциальный контент', twitch: 'https://www.twitch.tv/karapyzz69', youtube: 'https://www.youtube.com/@KarapyzzAntisocials' },
+        daszook: { name: 'daszook', avatar: 'https://unavatar.io/twitch/daszook', avatarFallback: 'https://ui-avatars.com/api/?name=D&background=00cfff&color=000', desc: 'GTA 5 RP — стримы и видео', twitch: 'https://www.twitch.tv/daszook', youtube: 'https://www.youtube.com/@daszook' },
+        scrooge: { name: 'Scrooge', avatar: 'https://unavatar.io/youtube/Scrooge5rp', avatarFallback: 'https://ui-avatars.com/api/?name=S&background=ff3a3a&color=fff', desc: 'YouTube — нарезки с GTA 5 RP', youtube: 'https://www.youtube.com/@Scrooge5rp' },
+        vuitton: { name: 'Vuitton', avatar: 'https://unavatar.io/twitch/vu1ttongg', avatarFallback: 'https://ui-avatars.com/api/?name=V&background=ffe600&color=000', desc: 'GTA 5 RP — стиль жизни в городе', twitch: 'https://www.twitch.tv/vu1ttongg', youtube: 'https://www.youtube.com/@Vuitton-gg' },
+        escamismed: { name: 'Escamismed', avatar: 'https://unavatar.io/twitch/escapismed', avatarFallback: 'https://ui-avatars.com/api/?name=E&background=9146ff&color=fff', desc: 'Twitch — живые стримы GTA 5 RP', twitch: 'https://www.twitch.tv/escapismed' }
+      };
+      localStorage.setItem('royce_media', JSON.stringify(defaultMedia));
+      return defaultMedia;
+    }
+
+    const MEDIA = getMediaPartners();
+
+    const STATS_IDS = {
+      loves65: { yt: 'yt-sub-loves65', tw: 'tw-fol-loves65' },
+      karapyzz: { yt: 'yt-sub-karapyzz', tw: 'tw-fol-karapyzz' },
+      daszook: { yt: 'yt-sub-daszook', tw: 'tw-fol-daszook' },
+      scrooge: { yt: 'yt-sub-scrooge' },
+      vuitton: { yt: 'yt-sub-vuitton', tw: 'tw-fol-vuitton' },
+      escamismed: { tw: 'tw-fol-escamismed' }
+    };
+
+    function renderMediaGrid() {
+      const grid = document.getElementById('mediaGrid');
+      grid.innerHTML = Object.entries(MEDIA).map(([key, m]) => `
+        <div class="media-card" role="listitem" tabindex="0" data-key="${key}" onclick="openModal('${key}')" onkeydown="if(event.key==='Enter'||event.key===' ') openModal('${key}')">
+          <div class="media-avatar-wrap">
+            <img class="media-avatar" src="${m.avatar}" onerror="handleAvatarError(this, '${m.avatarFallback}')" alt="${m.name} avatar">
+          </div>
+          <div class="media-info">
+            <div class="media-name">${m.name}</div>
+            <div class="media-desc">${m.desc}</div>
+            <div class="media-platforms">
+              ${m.twitch ? `<span class="plat-badge twitch-badge">💜 Twitch</span>` : ''}
+              ${m.youtube ? `<span class="plat-badge yt-badge">📺 YouTube</span>` : ''}
+            </div>
+            <div class="media-stats" id="stats-${key}">
+              ${m.youtube ? `<div class="stat-pill"><span class="stat-pill-val" id="${STATS_IDS[key]?.yt || ''}">—</span><span>подписчиков</span></div>` : ''}
+              ${m.twitch ? `<div class="stat-pill twitch-pill"><span class="stat-pill-val" id="${STATS_IDS[key]?.tw || ''}">—</span><span>фолловеров</span></div>` : ''}
+            </div>
+          </div>
+          <div class="media-hover-hint">НАЖМИ ДЛЯ ВЫБОРА</div>
+        </div>
+      `).join('');
+    }
+
+    // Полный fallback цепочки: unavatar → ui-avatars → инициалы → blank
+    window.handleAvatarError = function(img, fallback) {
+      if (!img) return;
+      if (img.src !== fallback) {
+        img.src = fallback;
+        return;
+      }
+      const initials = img.alt?.charAt(0)?.toUpperCase() || '?';
+      img.src = `https://ui-avatars.com/api/?name=${initials}&background=00ff9f&color=000&size=80`;
+    };
+
+    window.openModal = function(key) {
+      const m = MEDIA[key];
+      if (!m) return;
+      document.getElementById('modal-name').textContent = m.name;
+      document.getElementById('modal-desc').textContent = m.desc;
+      const img = document.getElementById('modal-avatar');
+      img.alt = `${m.name} avatar`;
+      img.src = m.avatar;
+      img.onerror = () => { handleAvatarError(img, m.avatarFallback); };
+      let btns = '';
+      if (m.twitch) btns += `<a href="${m.twitch}" target="_blank" rel="noopener noreferrer" class="modal-btn modal-btn-twitch" role="listitem">💜 Смотреть на Twitch</a>`;
+      if (m.youtube) btns += `<a href="${m.youtube}" target="_blank" rel="noopener noreferrer" class="modal-btn modal-btn-yt" role="listitem">📺 Смотреть на YouTube</a>`;
+      document.getElementById('modal-btns').innerHTML = btns;
+      document.getElementById('platform-modal').classList.add('open');
+      document.getElementById('platform-modal').focus();
+    };
+
+    window.closeModal = function(e) {
+      if (e.target === document.getElementById('platform-modal')) {
+        document.getElementById('platform-modal').classList.remove('open');
+      }
+    };
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') {
+        document.getElementById('platform-modal').classList.remove('open');
+        document.activeElement?.blur();
+      }
+    });
+
+    // Загрузка статистики с debounce (мин. 3 сек между обновлениями)
+    let lastStatsUpdate = 0;
+    const STATS_DEBOUNCE_MS = 3000;
+
+    async function loadStats() {
+      const now = Date.now();
+      if (now - lastStatsUpdate < STATS_DEBOUNCE_MS) return;
+      try {
+        const stats = await window.fetchMediaStats?.();
+        if (!stats) return;
+        Object.entries(stats).forEach(([id, val]) => {
+          const twEl = document.getElementById(STATS_IDS[id]?.tw);
+          const ytEl = document.getElementById(STATS_IDS[id]?.yt);
+          if (twEl) twEl.textContent = val.tw?.toLocaleString('ru-RU') || '—';
+          if (ytEl) ytEl.textContent = val.yt?.toLocaleString('ru-RU') || '—';
+        });
+        const lastUpdate = localStorage.getItem('stats_last_update');
+        const timeEl = document.getElementById('last-update-time');
+        if (timeEl && lastUpdate) {
+          timeEl.textContent = new Date(parseInt(lastUpdate)).toLocaleString('ru-RU');
+        }
+        lastStatsUpdate = now;
+      } catch (e) {
+        console.warn('Stats update failed:', e);
+      }
+    }
+
+    renderMediaGrid();
+    loadStats();
+    setInterval(loadStats, 5000);
+  </script>
+</body>
+</html>
