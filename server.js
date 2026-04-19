@@ -69,6 +69,11 @@ function extractTwitchLogin(url) {
   return match ? match[1].toLowerCase() : null;
 }
 
+// Generate unique ID from name
+function generateId(name) {
+  return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+}
+
 // ==============================================
 // TWITCH API
 // ==============================================
@@ -274,7 +279,7 @@ async function getYouTubeChannelData(handle) {
 // COMBINED MEDIA ITEM RESOLVER
 // ==============================================
 
-async function getLiveMediaItem(source) {
+async function getLiveMediaItem(source, index) {
   const youtubeHandle = extractYouTubeHandle(source.youtube);
   const twitchLogin = extractTwitchLogin(source.twitch);
 
@@ -286,29 +291,48 @@ async function getLiveMediaItem(source) {
 
   // Determine avatar based on preference
   let avatar = null;
+  let avatarSource = null;
+  
   if (source.avatarPreference === 'youtube' && youtubeData?.avatar) {
     avatar = youtubeData.avatar;
+    avatarSource = 'youtube';
   } else if (source.avatarPreference === 'twitch' && twitchData?.avatar) {
     avatar = twitchData.avatar;
-  } else {
-    // Fallback: use whichever is available
-    avatar = twitchData?.avatar || youtubeData?.avatar || null;
+    avatarSource = 'twitch';
+  } else if (twitchData?.avatar) {
+    avatar = twitchData.avatar;
+    avatarSource = 'twitch';
+  } else if (youtubeData?.avatar) {
+    avatar = youtubeData.avatar;
+    avatarSource = 'youtube';
+  }
+
+  // Collect warnings
+  const warnings = [];
+  if (source.youtube && !youtubeData) {
+    warnings.push('YouTube канал не найден');
+  }
+  if (source.twitch && !twitchData) {
+    warnings.push('Twitch канал не найден');
   }
 
   return {
+    id: generateId(source.name) || `media-${index}`,
     name: source.name,
     description: source.description,
     avatar: avatar,
+    avatarSource: avatarSource,
     youtube: source.youtube || null,
     twitch: source.twitch || null,
     stats: {
-      youtubeSubscribers: youtubeData?.subscribers || null,
-      twitchFollowers: twitchData?.followers || null
+      youtubeSubscribers: youtubeData?.subscribers ?? null,
+      twitchFollowers: twitchData?.followers ?? null
     },
     displayName: {
       youtube: youtubeData?.title || null,
       twitch: twitchData?.displayName || null
-    }
+    },
+    warnings: warnings
   };
 }
 
@@ -330,7 +354,7 @@ app.get('/api/health', (_req, res) => {
 app.get('/api/media/live', async (_req, res) => {
   try {
     const sources = await readSources();
-    const items = await Promise.all(sources.map(getLiveMediaItem));
+    const items = await Promise.all(sources.map((source, index) => getLiveMediaItem(source, index)));
     
     res.json({ 
       ok: true, 
@@ -400,7 +424,7 @@ app.post('/api/media/resolve', async (req, res) => {
       return res.status(400).json({ ok: false, message: 'Invalid sources' });
     }
 
-    const items = await Promise.all(sourceList.map(getLiveMediaItem));
+    const items = await Promise.all(sourceList.map((source, index) => getLiveMediaItem(source, index)));
     
     res.json({ 
       ok: true, 
