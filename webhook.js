@@ -5,7 +5,7 @@
 
 const DISCORD_WEBHOOK = 'https://discord.com/api/webhooks/1495157365560053902/TgfSxctBsJWCbXSoYCCueQjaLfHZIraEGL5Jxxgahr6JOcqKZBDxS-9jjTOLCfDQBsMS';
 
-// Telegram Bot Configuration
+// Telegram Bot Configuration - @Royce_fmq_bot
 const TELEGRAM_BOT_TOKEN = '8226759269:AAE4DyaZAxxn9iHcsgGr3xtty9bGCjyiIpQ';
 const TELEGRAM_CHAT_ID = '1601213844';
 const TELEGRAM_API = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}`;
@@ -36,7 +36,7 @@ function formatDate(date) {
 
 function escapeHtml(text) {
   if (!text) return '—';
-  return text
+  return String(text)
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;');
@@ -103,7 +103,8 @@ function formatTelegramApplication(data) {
 📝 <b>Почему хочет вступить:</b>
 <i>${escapeHtml(data.reason)}</i>
 
-📅 <b>Дата:</b> ${date}`;
+📅 <b>Дата:</b> ${date}
+🆔 <b>ID заявки:</b> <code>${data.id || Date.now()}</code>`;
 }
 
 function formatTelegramStatusUpdate(data, status, rejectReason = null) {
@@ -123,7 +124,7 @@ function formatTelegramStatusUpdate(data, status, rejectReason = null) {
 }
 
 // =====================================================
-// DISCORD INTEGRATION (original code preserved)
+// DISCORD INTEGRATION
 // =====================================================
 
 async function postDiscordEmbed(embed) {
@@ -170,7 +171,7 @@ function buildDiscordApplicationEmbed(data) {
       { name: '🎮 Опыт в RP', value: getExperienceLabel(data.experience), inline: true },
       { name: '📝 Причина вступления', value: data.reason || '—' }
     ],
-    footer: { text: 'Royce Family Application System' },
+    footer: { text: `Royce Family · ID: ${data.id || 'N/A'}` },
     timestamp: new Date().toISOString()
   };
 }
@@ -202,18 +203,23 @@ function buildDiscordStatusEmbed(data, status, rejectReason = null) {
 /**
  * Send new application notification to Discord and Telegram
  * @param {Object} data - Application data
- * @returns {Promise<{discord: boolean, telegram: boolean}>}
+ * @returns {Promise<boolean>} - true if at least one notification sent
  */
 async function sendApplicationNotification(data) {
+  console.log('📤 Sending application notification...', data);
+  
   const results = await Promise.allSettled([
     postDiscordEmbed(buildDiscordApplicationEmbed(data)),
     sendTelegramMessage(formatTelegramApplication(data))
   ]);
 
-  return {
-    discord: results[0].status === 'fulfilled' && results[0].value,
-    telegram: results[1].status === 'fulfilled' && results[1].value
-  };
+  const discordOk = results[0].status === 'fulfilled' && results[0].value;
+  const telegramOk = results[1].status === 'fulfilled' && results[1].value;
+
+  console.log(`Discord: ${discordOk ? '✅' : '❌'}, Telegram: ${telegramOk ? '✅' : '❌'}`);
+
+  // Return true if at least one notification was sent
+  return discordOk || telegramOk;
 }
 
 /**
@@ -221,7 +227,7 @@ async function sendApplicationNotification(data) {
  * @param {Object} data - Application data
  * @param {string} status - 'accepted' or 'rejected'
  * @param {string|null} rejectReason - Rejection reason (if rejected)
- * @returns {Promise<{discord: boolean, telegram: boolean}>}
+ * @returns {Promise<boolean>}
  */
 async function sendStatusNotification(data, status, rejectReason = null) {
   const results = await Promise.allSettled([
@@ -229,10 +235,23 @@ async function sendStatusNotification(data, status, rejectReason = null) {
     sendTelegramMessage(formatTelegramStatusUpdate(data, status, rejectReason))
   ]);
 
-  return {
-    discord: results[0].status === 'fulfilled' && results[0].value,
-    telegram: results[1].status === 'fulfilled' && results[1].value
-  };
+  const discordOk = results[0].status === 'fulfilled' && results[0].value;
+  const telegramOk = results[1].status === 'fulfilled' && results[1].value;
+
+  return discordOk || telegramOk;
+}
+
+// =====================================================
+// LEGACY SUPPORT - for apply.html compatibility
+// =====================================================
+
+/**
+ * Legacy function name for backward compatibility
+ * @param {Object} data - Application data
+ * @returns {Promise<boolean>}
+ */
+async function sendToDiscord(data) {
+  return sendApplicationNotification(data);
 }
 
 // =====================================================
@@ -241,13 +260,18 @@ async function sendStatusNotification(data, status, rejectReason = null) {
 
 // For browser (attach to window)
 if (typeof window !== 'undefined') {
+  // New API
   window.RoyceWebhook = {
     sendApplicationNotification,
     sendStatusNotification,
-    // Legacy support (for existing code)
-    sendApplication: sendApplicationNotification,
-    notifyStatus: sendStatusNotification
+    sendTelegramMessage,
+    postDiscordEmbed
   };
+  
+  // Legacy support - direct function on window for apply.html
+  window.sendToDiscord = sendToDiscord;
+  window.sendApplicationNotification = sendApplicationNotification;
+  window.sendStatusNotification = sendStatusNotification;
 }
 
 // For Node.js modules
@@ -257,6 +281,7 @@ if (typeof module !== 'undefined' && module.exports) {
     sendStatusNotification,
     sendTelegramMessage,
     postDiscordEmbed,
+    sendToDiscord,
     TELEGRAM_BOT_TOKEN,
     TELEGRAM_CHAT_ID
   };
