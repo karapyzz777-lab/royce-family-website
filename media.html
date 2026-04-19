@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Медиа — Royce Family</title>
-  <meta name="description" content="Медиа-партнёры Royce Family, статистика и переходы на платформы.">
+  <meta name="description" content="Медиа-партнёры Royce Family с live-статистикой YouTube и Twitch.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
@@ -39,11 +39,15 @@
       <section class="page-hero">
         <div class="container">
           <div class="page-hero-card reveal">
-            <div class="kicker">Медиа семьи</div>
-            <h1>Лица, контент и живой трафик Royce Family</h1>
+            <div class="kicker">Live media sync</div>
+            <h1>Медиа Royce Family теперь подтягивает аватары и статистику автоматически</h1>
             <p>
-              Здесь собраны медиа-партнёры семьи. Раздел остался функциональным, но визуально был приведён к единому luxury-стилю. Теперь пользователь открывает отдельную страницу, а не ищет карточки внутри длинного скролла.
+              Теперь можно вообще не лезть в код страницы. Добавляй ссылки через админку или в <strong>media-sources.json</strong>, а сайт сам берёт аватарки и счётчики с YouTube и Twitch через backend-роут <strong>/api/media/resolve</strong>.
             </p>
+            <div class="hero-actions" style="margin-top:18px; display:flex; gap:12px; flex-wrap:wrap;">
+              <button class="btn btn-primary" type="button" id="refreshMediaBtn">Обновить сейчас</button>
+              <a class="btn btn-secondary" href="admin.html">Открыть админку медиа</a>
+            </div>
           </div>
         </div>
       </section>
@@ -52,22 +56,76 @@
         <div class="container">
           <div class="section-head reveal">
             <div>
-              <span class="section-label">Медиа-партнёры</span>
-              <h2 class="section-title">Актуальные карточки с платформами</h2>
+              <span class="section-label">Как теперь удобно</span>
+              <h2 class="section-title">Редактирование ссылок без ручной правки html</h2>
             </div>
-            <p class="section-copy">Нажатие на карточку открывает отдельное окно с выбором платформы. Статистика продолжает подгружаться из localStorage через mock-api.js.</p>
+            <p class="section-copy">Если в браузере сохранены свои медиа-источники из админки — страница использует их. Если нет, автоматически берёт данные из файла media-sources.json.</p>
           </div>
 
+          <div class="form-wrap reveal media-setup-grid">
+            <div class="form-panel">
+              <h3 class="form-title" style="font-size:2rem;">Что делать теперь</h3>
+              <div class="notice-stack">
+                <div class="notice">
+                  <strong>1. Открой admin.html</strong>
+                  <p>В админке появился блок управления медиа, где можно добавить YouTube/Twitch ссылки через форму.</p>
+                </div>
+                <div class="notice">
+                  <strong>2. Сохрани карточку</strong>
+                  <p>Сайт запишет источник в <code>localStorage</code> и media-страница сразу начнёт использовать эти данные.</p>
+                </div>
+                <div class="notice">
+                  <strong>3. Нажми «Обновить сейчас»</strong>
+                  <p>Страница отправит список ссылок на backend и вернёт живые аватары/цифры.</p>
+                </div>
+              </div>
+            </div>
+
+            <aside class="form-side">
+              <div class="lux-card compact-card">
+                <span class="section-label">Источник</span>
+                <h3>admin.html</h3>
+                <p>Самый быстрый путь: добавлять медиа не через код, а через визуальную форму.</p>
+              </div>
+              <div class="lux-card compact-card">
+                <span class="section-label">Fallback</span>
+                <h3>media-sources.json</h3>
+                <p>Если локальных данных нет, подгружается стандартный JSON-файл проекта.</p>
+              </div>
+              <div class="lux-card compact-card">
+                <span class="section-label">Кэш</span>
+                <h3>Server cache</h3>
+                <p>Сервер кэширует ответы, чтобы квота API не сгорала на каждом обновлении страницы.</p>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <div class="section-head reveal media-toolbar">
+            <div>
+              <span class="section-label">Медиа-партнёры</span>
+              <h2 class="section-title">Live-карточки с платформами</h2>
+            </div>
+            <div class="toolbar-meta">
+              <span class="status-chip" id="mediaStatusChip">Загрузка...</span>
+              <span class="helper" id="sourceModeText">Источник: —</span>
+              <span class="last-update" id="lastUpdateText">Последнее обновление: —</span>
+            </div>
+          </div>
+
+          <div class="error-toast" id="mediaErrorToast" role="status" aria-live="polite"></div>
           <div class="media-grid" id="mediaGrid"></div>
-          <p class="last-update reveal" style="margin-top:18px;" id="lastUpdateText">Последнее обновление статистики: —</p>
         </div>
       </section>
 
       <section class="section">
         <div class="container cta-banner reveal">
           <div>
-            <h2>Хочешь, чтобы пользователь после медиа сразу конвертировался?</h2>
-            <p>Следующая логичная страница — форма вступления. Такой переход делает сайт собранным и повышает шанс, что человек реально оставит заявку.</p>
+            <h2>После медиа пользователь должен идти дальше — в заявку</h2>
+            <p>Теперь раздел медиа не декоративный, а реально показывает активность участников и повышает доверие к семье.</p>
           </div>
           <div style="display:flex;gap:12px;flex-wrap:wrap;">
             <a href="rules.html" class="btn btn-secondary">Посмотреть правила</a>
@@ -81,7 +139,7 @@
       <div class="container footer-card">
         <div>
           <div class="brand-title">ROYCE FAMILY</div>
-          <div class="footer-copy">© <span data-year></span> · медиа-раздел в отдельной странице</div>
+          <div class="footer-copy">© <span data-year></span> · live media page</div>
         </div>
         <div class="footer-links">
           <a href="index.html" class="nav-link">Главная</a>
@@ -104,147 +162,87 @@
         </div>
       </div>
       <div class="media-actions" id="modalActions"></div>
+      <div class="last-update" id="modalWarnings" style="margin-top:14px;"></div>
     </div>
   </div>
 
   <script src="app.js"></script>
-  <script src="mock-api.js"></script>
   <script>
-    const defaultMedia = {
-      loves65: {
-        name: 'Loves65',
-        avatar: 'https://unavatar.io/twitch/loves65',
-        avatarFallback: 'https://ui-avatars.com/api/?name=L&background=11151d&color=E7D6A8',
-        desc: 'GTA 5 RP — стримы, атмосфера города и живая подача сервера.',
-        twitch: 'https://www.twitch.tv/loves65',
-        youtube: 'https://www.youtube.com/@Loves65'
-      },
-      karapyzz: {
-        name: 'Karapyzz69',
-        avatar: 'https://unavatar.io/twitch/karapyzz69',
-        avatarFallback: 'https://ui-avatars.com/api/?name=K&background=11151d&color=E7D6A8',
-        desc: 'Харизматичный RP-контент и уличный вайб Los Santos.',
-        twitch: 'https://www.twitch.tv/karapyzz69',
-        youtube: 'https://www.youtube.com/@KarapyzzAntisocials'
-      },
-      daszook: {
-        name: 'daszook',
-        avatar: 'https://unavatar.io/twitch/daszook',
-        avatarFallback: 'https://ui-avatars.com/api/?name=D&background=11151d&color=E7D6A8',
-        desc: 'Стримы и видео по GTA 5 RP с живыми игровыми моментами.',
-        twitch: 'https://www.twitch.tv/daszook',
-        youtube: 'https://www.youtube.com/@daszook'
-      },
-      scrooge: {
-        name: 'Scrooge',
-        avatar: 'https://unavatar.io/youtube/Scrooge5rp',
-        avatarFallback: 'https://ui-avatars.com/api/?name=S&background=11151d&color=E7D6A8',
-        desc: 'YouTube-формат с нарезками и контентом по GTA 5 RP.',
-        youtube: 'https://www.youtube.com/@Scrooge5rp'
-      },
-      vuitton: {
-        name: 'Vuitton',
-        avatar: 'https://unavatar.io/twitch/vu1ttongg',
-        avatarFallback: 'https://ui-avatars.com/api/?name=V&background=11151d&color=E7D6A8',
-        desc: 'Стиль жизни в городе, стримы и медийный образ семьи.',
-        twitch: 'https://www.twitch.tv/vu1ttongg',
-        youtube: 'https://www.youtube.com/@Vuitton-gg'
-      },
-      escamismed: {
-        name: 'Escamismed',
-        avatar: 'https://unavatar.io/twitch/escapismed',
-        avatarFallback: 'https://ui-avatars.com/api/?name=E&background=11151d&color=E7D6A8',
-        desc: 'Twitch-поддержка, прямые эфиры и общение с аудиторией.',
-        twitch: 'https://www.twitch.tv/escapismed'
-      }
-    };
-
-    const STORAGE_KEY = 'royce_media';
-    const mediaData = (() => {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) {
-        try {
-          return JSON.parse(saved);
-        } catch (error) {
-          console.warn('Не удалось прочитать сохранённые медиа-данные', error);
-        }
-      }
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultMedia));
-      return defaultMedia;
-    })();
-
-    const statsIds = {
-      loves65: { yt: 'yt-sub-loves65', tw: 'tw-fol-loves65' },
-      karapyzz: { yt: 'yt-sub-karapyzz', tw: 'tw-fol-karapyzz' },
-      daszook: { yt: 'yt-sub-daszook', tw: 'tw-fol-daszook' },
-      scrooge: { yt: 'yt-sub-scrooge' },
-      vuitton: { yt: 'yt-sub-vuitton', tw: 'tw-fol-vuitton' },
-      escamismed: { tw: 'tw-fol-escamismed' }
-    };
-
+    const MEDIA_SOURCES_KEY = 'royce_media_sources';
     const grid = document.getElementById('mediaGrid');
     const modal = document.getElementById('platformModal');
     const modalName = document.getElementById('modalName');
     const modalDesc = document.getElementById('modalDesc');
     const modalAvatar = document.getElementById('modalAvatar');
     const modalActions = document.getElementById('modalActions');
+    const modalWarnings = document.getElementById('modalWarnings');
     const lastUpdateText = document.getElementById('lastUpdateText');
+    const sourceModeText = document.getElementById('sourceModeText');
+    const statusChip = document.getElementById('mediaStatusChip');
+    const errorToast = document.getElementById('mediaErrorToast');
+    const refreshBtn = document.getElementById('refreshMediaBtn');
+    let liveItems = [];
 
-    function handleAvatarError(img, fallback) {
-      if (!img) return;
-      if (img.src !== fallback) {
-        img.src = fallback;
-      }
+    function formatNumber(value) {
+      return typeof value === 'number' ? value.toLocaleString('ru-RU') : '—';
     }
 
-    function renderMedia() {
-      grid.innerHTML = Object.entries(mediaData).map(([key, item]) => `
-        <article class="media-card reveal" tabindex="0" data-key="${key}">
+    function showError(message) {
+      errorToast.textContent = message;
+      errorToast.classList.add('show', 'error');
+      setTimeout(() => errorToast.classList.remove('show', 'error'), 5000);
+    }
+
+    function renderMedia(items) {
+      liveItems = items;
+      grid.innerHTML = items.map((item) => `
+        <article class="media-card reveal visible" tabindex="0" data-id="${item.id}">
           <div class="media-top">
-            <img class="avatar" src="${item.avatar}" alt="${item.name}" onerror="this.onerror=null; this.src='${item.avatarFallback}';">
+            <img class="avatar" src="${item.avatar}" alt="${item.name}" loading="lazy">
             <div>
               <h3>${item.name}</h3>
-              <p>${item.desc}</p>
+              <p>${item.description || 'Медиа-участник Royce Family'}</p>
             </div>
           </div>
           <div class="media-badges">
             ${item.twitch ? '<span class="badge purple">Twitch</span>' : ''}
             ${item.youtube ? '<span class="badge red">YouTube</span>' : ''}
+            ${item.avatarSource ? `<span class="badge gold">Avatar: ${item.avatarSource}</span>` : ''}
           </div>
-          <div class="stat-pills" id="stats-${key}">
-            ${item.youtube ? `<span class="stat-pill gold"><strong id="${statsIds[key]?.yt || ''}">—</strong>&nbsp;подписчиков</span>` : ''}
-            ${item.twitch ? `<span class="stat-pill"><strong id="${statsIds[key]?.tw || ''}">—</strong>&nbsp;фолловеров</span>` : ''}
+          <div class="stat-pills">
+            ${item.youtube ? `<span class="stat-pill gold"><strong>${formatNumber(item.stats.youtubeSubscribers)}</strong>&nbsp;подписчиков</span>` : ''}
+            ${item.twitch ? `<span class="stat-pill"><strong>${formatNumber(item.stats.twitchFollowers)}</strong>&nbsp;фолловеров</span>` : ''}
           </div>
+          ${item.warnings?.length ? `<div class="helper media-warning">${item.warnings.join(' · ')}</div>` : ''}
           <div class="media-actions">
-            <button class="btn btn-secondary" type="button">Открыть ссылки</button>
+            <button class="btn btn-secondary" type="button">Открыть карточку</button>
           </div>
         </article>
       `).join('');
 
       document.querySelectorAll('.media-card').forEach(card => {
-        card.classList.add('visible');
-        card.addEventListener('click', () => openModal(card.dataset.key));
+        card.addEventListener('click', () => openModal(card.dataset.id));
         card.addEventListener('keydown', (event) => {
           if (event.key === 'Enter' || event.key === ' ') {
             event.preventDefault();
-            openModal(card.dataset.key);
+            openModal(card.dataset.id);
           }
         });
       });
     }
 
-    function openModal(key) {
-      const item = mediaData[key];
+    function openModal(id) {
+      const item = liveItems.find(entry => entry.id === id);
       if (!item) return;
       modalName.textContent = item.name;
-      modalDesc.textContent = item.desc;
+      modalDesc.textContent = item.description || 'Медиа-участник Royce Family';
       modalAvatar.src = item.avatar;
       modalAvatar.alt = item.name;
-      modalAvatar.onerror = () => handleAvatarError(modalAvatar, item.avatarFallback);
       modalActions.innerHTML = `
         ${item.twitch ? `<a class="btn btn-secondary" href="${item.twitch}" target="_blank" rel="noopener noreferrer">Открыть Twitch</a>` : ''}
         ${item.youtube ? `<a class="btn btn-primary" href="${item.youtube}" target="_blank" rel="noopener noreferrer">Открыть YouTube</a>` : ''}
       `;
+      modalWarnings.textContent = item.warnings?.length ? item.warnings.join(' · ') : 'Данные загружены без предупреждений.';
       modal.classList.add('open');
       modal.setAttribute('aria-hidden', 'false');
     }
@@ -254,38 +252,68 @@
       modal.setAttribute('aria-hidden', 'true');
     }
 
+    async function getSourcesForMedia() {
+      const localRaw = localStorage.getItem(MEDIA_SOURCES_KEY);
+      if (localRaw) {
+        try {
+          const parsed = JSON.parse(localRaw);
+          if (Array.isArray(parsed) && parsed.length) {
+            return { mode: 'localStorage', sources: parsed };
+          }
+        } catch (error) {
+          console.warn('Не удалось прочитать локальные медиа-источники', error);
+        }
+      }
+
+      const response = await fetch('media-sources.json', { cache: 'no-store' });
+      if (!response.ok) {
+        throw new Error('Не удалось открыть media-sources.json');
+      }
+      const parsed = await response.json();
+      return { mode: 'file', sources: Array.isArray(parsed) ? parsed : [] };
+    }
+
+    async function loadLiveMedia() {
+      statusChip.textContent = 'Обновление...';
+      statusChip.classList.remove('is-ok', 'is-error');
+
+      try {
+        const config = await getSourcesForMedia();
+        sourceModeText.textContent = `Источник: ${config.mode === 'localStorage' ? 'админка / localStorage' : 'media-sources.json'}`;
+
+        const response = await fetch('/api/media/resolve', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sources: config.sources })
+        });
+        const data = await response.json();
+        if (!response.ok || !data.ok) {
+          throw new Error(data.message || 'Сервер не вернул данные');
+        }
+
+        renderMedia(data.items || []);
+        statusChip.textContent = 'Live sync активен';
+        statusChip.classList.add('is-ok');
+        lastUpdateText.textContent = `Последнее обновление: ${new Date(data.updatedAt).toLocaleString('ru-RU')}`;
+      } catch (error) {
+        statusChip.textContent = 'Ошибка API';
+        statusChip.classList.add('is-error');
+        showError('Не удалось получить live-статистику. Проверь .env, server.js и настройки медиа в админке');
+        console.error(error);
+      }
+    }
+
+    refreshBtn.addEventListener('click', loadLiveMedia);
     document.getElementById('closeModalBtn').addEventListener('click', closeModal);
     modal.addEventListener('click', (event) => {
       if (event.target === modal) closeModal();
     });
-
     document.addEventListener('keydown', (event) => {
       if (event.key === 'Escape') closeModal();
     });
 
-    async function loadStats() {
-      try {
-        const stats = await window.fetchMediaStats?.();
-        if (!stats) return;
-        Object.entries(stats).forEach(([key, value]) => {
-          const yt = document.getElementById(statsIds[key]?.yt);
-          const tw = document.getElementById(statsIds[key]?.tw);
-          if (yt) yt.textContent = value.yt?.toLocaleString('ru-RU') || '—';
-          if (tw) tw.textContent = value.tw?.toLocaleString('ru-RU') || '—';
-        });
-
-        const lastUpdate = localStorage.getItem('stats_last_update');
-        if (lastUpdate) {
-          lastUpdateText.textContent = `Последнее обновление статистики: ${new Date(Number(lastUpdate)).toLocaleString('ru-RU')}`;
-        }
-      } catch (error) {
-        console.warn('Не удалось загрузить статистику', error);
-      }
-    }
-
-    renderMedia();
-    loadStats();
-    setInterval(loadStats, 5000);
+    loadLiveMedia();
+    setInterval(loadLiveMedia, 300000);
   </script>
 </body>
 </html>

@@ -1,0 +1,42 @@
+[
+  {
+    "name": "Loves65",
+    "description": "GTA 5 RP — стримы, атмосфера города и живая подача сервера.",
+    "youtube": "https://www.youtube.com/@Loves65",
+    "twitch": "https://www.twitch.tv/loves65",
+    "avatarPreference": "twitch"
+  },
+  {
+    "name": "Karapyzz69",
+    "description": "Харизматичный RP-контент и уличный вайб Los Santos.",
+    "youtube": "https://www.youtube.com/@KarapyzzAntisocials",
+    "twitch": "https://www.twitch.tv/karapyzz69",
+    "avatarPreference": "twitch"
+  },
+  {
+    "name": "daszook",
+    "description": "Стримы и видео по GTA 5 RP с живыми игровыми моментами.",
+    "youtube": "https://www.youtube.com/@daszook",
+    "twitch": "https://www.twitch.tv/daszook",
+    "avatarPreference": "twitch"
+  },
+  {
+    "name": "Scrooge",
+    "description": "YouTube-формат с нарезками и контентом по GTA 5 RP.",
+    "youtube": "https://www.youtube.com/@Scrooge5rp",
+    "avatarPreference": "youtube"
+  },
+  {
+    "name": "Vuitton",
+    "description": "Стиль жизни в городе, стримы и медийный образ семьи.",
+    "youtube": "https://www.youtube.com/@Vuitton-gg",
+    "twitch": "https://www.twitch.tv/vu1ttongg",
+    "avatarPreference": "twitch"
+  },
+  {
+    "name": "Escamismed",
+    "description": "Twitch-поддержка, прямые эфиры и общение с аудиторией.",
+    "twitch": "https://www.twitch.tv/escapismed",
+    "avatarPreference": "twitch"
+  }
+]

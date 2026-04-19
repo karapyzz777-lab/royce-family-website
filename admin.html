@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin — Royce Family</title>
-  <meta name="description" content="Админ-панель Royce Family для просмотра и обработки заявок.">
+  <meta name="description" content="Админ-панель Royce Family для просмотра заявок и управления медиа-источниками.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
@@ -30,7 +30,7 @@
             <a href="rules.html" class="nav-link">Правила</a>
             <a href="apply.html" class="nav-link">Вступить</a>
           </div>
-          <a href="apply.html" class="btn btn-secondary nav-cta">Вернуться на сайт</a>
+          <a href="media.html" class="btn btn-secondary nav-cta">Открыть media</a>
         </nav>
       </div>
     </header>
@@ -40,8 +40,8 @@
         <div class="container">
           <div class="page-hero-card reveal">
             <div class="kicker">Admin access</div>
-            <h1>Панель заявок Royce Family</h1>
-            <p>Я также привёл в порядок admin.html: восстановил структуру, логику входа, таблицу заявок, фильтры и модальное окно обработки кандидатов.</p>
+            <h1>Панель заявок и медиа Royce Family</h1>
+            <p>Я сделал админку удобнее: теперь здесь можно не только обрабатывать заявки, но и добавлять медиа-участников через форму без ручного редактирования HTML.</p>
           </div>
         </div>
       </section>
@@ -51,7 +51,7 @@
           <div class="form-panel reveal">
             <div class="kicker">Авторизация</div>
             <h2 class="form-title">Вход в админку</h2>
-            <p class="form-subtitle">Введи пароль и получи доступ к заявкам семьи.</p>
+            <p class="form-subtitle">Введи пароль и получи доступ к заявкам и live-медиа.</p>
             <form id="loginForm" class="form-grid" style="grid-template-columns:1fr;">
               <div class="form-group full">
                 <label class="label" for="adminPassword">Пароль</label>
@@ -68,41 +68,139 @@
           <div class="admin-bar">
             <div>
               <div class="kicker">Dashboard</div>
-              <h2 class="form-title" style="font-size:2.4rem; margin-bottom:6px;">Управление заявками</h2>
-              <p class="form-subtitle" style="margin:0;">Одобрение, отклонение и удаление заявок в одном месте.</p>
+              <h2 class="form-title" style="font-size:2.4rem; margin-bottom:6px;">Управление проектом</h2>
+              <p class="form-subtitle" style="margin:0;">Заявки и live-медиа в одном месте.</p>
             </div>
-            <button class="btn btn-secondary" id="logoutBtn">Выйти</button>
+            <div style="display:flex; gap:12px; flex-wrap:wrap;">
+              <a href="media.html" class="btn btn-secondary">Открыть media</a>
+              <button class="btn btn-ghost" id="logoutBtn">Выйти</button>
+            </div>
           </div>
 
-          <div class="admin-grid">
-            <article class="stat-box"><div class="stat-number" id="statTotal">0</div><div class="stat-label">Всего</div></article>
-            <article class="stat-box"><div class="stat-number" id="statPending">0</div><div class="stat-label">Новые</div></article>
-            <article class="stat-box"><div class="stat-number" id="statApproved">0</div><div class="stat-label">Принятые</div></article>
-            <article class="stat-box"><div class="stat-number" id="statRejected">0</div><div class="stat-label">Отклонённые</div></article>
+          <div class="admin-block">
+            <div class="admin-subsection-head">
+              <div>
+                <div class="kicker">Applications</div>
+                <h3 class="admin-subtitle">Управление заявками</h3>
+                <p class="helper">Одобрение, отклонение и удаление заявок в одном месте.</p>
+              </div>
+            </div>
+
+            <div class="admin-grid">
+              <article class="stat-box"><div class="stat-number" id="statTotal">0</div><div class="stat-label">Всего</div></article>
+              <article class="stat-box"><div class="stat-number" id="statPending">0</div><div class="stat-label">Новые</div></article>
+              <article class="stat-box"><div class="stat-number" id="statApproved">0</div><div class="stat-label">Принятые</div></article>
+              <article class="stat-box"><div class="stat-number" id="statRejected">0</div><div class="stat-label">Отклонённые</div></article>
+            </div>
+
+            <div class="filter-row" id="filterTabs">
+              <button class="filter-btn active" data-filter="all">Все</button>
+              <button class="filter-btn" data-filter="pending">Новые</button>
+              <button class="filter-btn" data-filter="approved">Принятые</button>
+              <button class="filter-btn" data-filter="rejected">Отклонённые</button>
+            </div>
+
+            <div class="table-wrap">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Дата</th>
+                    <th>Никнейм</th>
+                    <th>Discord</th>
+                    <th>Возраст</th>
+                    <th>Опыт</th>
+                    <th>Статус</th>
+                  </tr>
+                </thead>
+                <tbody id="applicationsTable"></tbody>
+              </table>
+              <div class="empty-state" id="emptyState" style="display:none;">Заявок пока нет</div>
+            </div>
           </div>
 
-          <div class="filter-row" id="filterTabs">
-            <button class="filter-btn active" data-filter="all">Все</button>
-            <button class="filter-btn" data-filter="pending">Новые</button>
-            <button class="filter-btn" data-filter="approved">Принятые</button>
-            <button class="filter-btn" data-filter="rejected">Отклонённые</button>
-          </div>
+          <div class="admin-block">
+            <div class="admin-subsection-head">
+              <div>
+                <div class="kicker">Media manager</div>
+                <h3 class="admin-subtitle">Управление live-медиа</h3>
+                <p class="helper">Добавляй ссылки на YouTube и Twitch через форму. Media-страница автоматически подхватит их из localStorage.</p>
+              </div>
+              <div class="admin-toolbar-actions">
+                <button class="btn btn-secondary" type="button" id="exportMediaBtn">Экспорт JSON</button>
+                <button class="btn btn-ghost" type="button" id="resetMediaBtn">Сбросить к файлу</button>
+              </div>
+            </div>
 
-          <div class="table-wrap">
-            <table class="table">
-              <thead>
-                <tr>
-                  <th>Дата</th>
-                  <th>Никнейм</th>
-                  <th>Discord</th>
-                  <th>Возраст</th>
-                  <th>Опыт</th>
-                  <th>Статус</th>
-                </tr>
-              </thead>
-              <tbody id="applicationsTable"></tbody>
-            </table>
-            <div class="empty-state" id="emptyState" style="display:none;">Заявок пока нет</div>
+            <div class="admin-mini-grid">
+              <article class="stat-box"><div class="stat-number" id="mediaCount">0</div><div class="stat-label">Медиа карточек</div></article>
+              <article class="stat-box"><div class="stat-number" id="youtubeCount">0</div><div class="stat-label">С YouTube</div></article>
+              <article class="stat-box"><div class="stat-number" id="twitchCount">0</div><div class="stat-label">С Twitch</div></article>
+            </div>
+
+            <div class="form-wrap admin-media-layout">
+              <div class="form-panel">
+                <div class="kicker">Форма медиа</div>
+                <h3 class="form-title" style="font-size:2rem;">Добавить или отредактировать участника</h3>
+                <p class="form-subtitle">Заполняй только нужные платформы. Сохранённые данные сразу будут доступны на странице media.html.</p>
+
+                <form id="mediaSourceForm" class="form-grid">
+                  <input type="hidden" id="mediaEditIndex">
+
+                  <div class="form-group">
+                    <label class="label" for="mediaName">Имя</label>
+                    <input class="input" id="mediaName" type="text" placeholder="Например, Loves65" required>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="label" for="avatarPreference">Приоритет аватара</label>
+                    <select class="select" id="avatarPreference">
+                      <option value="twitch">Twitch</option>
+                      <option value="youtube">YouTube</option>
+                    </select>
+                  </div>
+
+                  <div class="form-group full">
+                    <label class="label" for="mediaDescription">Описание</label>
+                    <textarea class="textarea" id="mediaDescription" placeholder="Короткое описание участника"></textarea>
+                  </div>
+
+                  <div class="form-group full">
+                    <label class="label" for="mediaYoutube">YouTube ссылка</label>
+                    <input class="input" id="mediaYoutube" type="url" placeholder="https://www.youtube.com/@channel">
+                  </div>
+
+                  <div class="form-group full">
+                    <label class="label" for="mediaTwitch">Twitch ссылка</label>
+                    <input class="input" id="mediaTwitch" type="url" placeholder="https://www.twitch.tv/login">
+                  </div>
+
+                  <div class="form-group full admin-form-actions">
+                    <button class="btn btn-primary" type="submit" id="saveMediaBtn">Сохранить участника</button>
+                    <button class="btn btn-secondary" type="button" id="clearMediaFormBtn">Очистить форму</button>
+                  </div>
+                </form>
+              </div>
+
+              <aside class="form-side">
+                <div class="lux-card compact-card">
+                  <span class="section-label">Источник</span>
+                  <h3>localStorage</h3>
+                  <p>После сохранения карточки media.html использует локальные данные без ручной правки страницы.</p>
+                </div>
+                <div class="lux-card compact-card">
+                  <span class="section-label">Fallback</span>
+                  <h3>media-sources.json</h3>
+                  <p>Кнопка «Сбросить к файлу» удаляет локальные настройки и возвращает стандартный JSON проекта.</p>
+                </div>
+                <div class="lux-card compact-card">
+                  <span class="section-label">Совет</span>
+                  <h3>После правки открой media</h3>
+                  <p>Нажми «Открыть media» и «Обновить сейчас», чтобы увидеть живые аватары и статистику.</p>
+                </div>
+              </aside>
+            </div>
+
+            <div class="media-manager-list" id="mediaSourceList"></div>
           </div>
         </div>
       </section>
@@ -152,6 +250,7 @@
   <script>
     const ADMIN_PASS = 'royce2024';
     const APPLICATIONS_KEY = 'royce_applications';
+    const MEDIA_SOURCES_KEY = 'royce_media_sources';
 
     const loginScreen = document.getElementById('loginScreen');
     const adminPanel = document.getElementById('adminPanel');
@@ -173,9 +272,23 @@
     const rejectSelect = document.getElementById('rejectSelect');
     const rejectCustom = document.getElementById('rejectCustom');
 
+    const mediaSourceForm = document.getElementById('mediaSourceForm');
+    const mediaSourceList = document.getElementById('mediaSourceList');
+    const mediaEditIndex = document.getElementById('mediaEditIndex');
+    const mediaName = document.getElementById('mediaName');
+    const mediaDescription = document.getElementById('mediaDescription');
+    const mediaYoutube = document.getElementById('mediaYoutube');
+    const mediaTwitch = document.getElementById('mediaTwitch');
+    const avatarPreference = document.getElementById('avatarPreference');
+    const clearMediaFormBtn = document.getElementById('clearMediaFormBtn');
+    const exportMediaBtn = document.getElementById('exportMediaBtn');
+    const resetMediaBtn = document.getElementById('resetMediaBtn');
+
     let applications = [];
     let currentFilter = 'all';
     let currentApplicationId = null;
+    let defaultMediaSources = [];
+    let mediaSources = [];
 
     function showNotification(message, isError = false) {
       notification.textContent = message;
@@ -208,11 +321,109 @@
       return div.innerHTML;
     }
 
+    async function loadDefaultMediaSources() {
+      try {
+        const response = await fetch('media-sources.json', { cache: 'no-store' });
+        if (!response.ok) throw new Error('Не удалось открыть media-sources.json');
+        const parsed = await response.json();
+        defaultMediaSources = Array.isArray(parsed) ? parsed : [];
+      } catch (error) {
+        defaultMediaSources = [];
+        console.warn(error);
+      }
+    }
+
+    function getStoredMediaSources() {
+      const raw = localStorage.getItem(MEDIA_SOURCES_KEY);
+      if (!raw) return [...defaultMediaSources];
+      try {
+        const parsed = JSON.parse(raw);
+        return Array.isArray(parsed) ? parsed : [...defaultMediaSources];
+      } catch (_error) {
+        return [...defaultMediaSources];
+      }
+    }
+
+    function saveMediaSources() {
+      localStorage.setItem(MEDIA_SOURCES_KEY, JSON.stringify(mediaSources));
+    }
+
+    function resetMediaForm() {
+      mediaEditIndex.value = '';
+      mediaSourceForm.reset();
+      avatarPreference.value = 'twitch';
+      document.getElementById('saveMediaBtn').textContent = 'Сохранить участника';
+    }
+
+    function updateMediaStats() {
+      document.getElementById('mediaCount').textContent = mediaSources.length;
+      document.getElementById('youtubeCount').textContent = mediaSources.filter(item => item.youtube).length;
+      document.getElementById('twitchCount').textContent = mediaSources.filter(item => item.twitch).length;
+    }
+
+    function renderMediaManager() {
+      updateMediaStats();
+
+      if (!mediaSources.length) {
+        mediaSourceList.innerHTML = '<div class="empty-state">Медиа-источников пока нет. Добавь первый через форму выше.</div>';
+        return;
+      }
+
+      mediaSourceList.innerHTML = mediaSources.map((item, index) => `
+        <article class="media-source-card">
+          <div class="media-source-head">
+            <div>
+              <h4>${escapeHtml(item.name || 'Без названия')}</h4>
+              <p>${escapeHtml(item.description || 'Без описания')}</p>
+            </div>
+            <span class="status-badge pending">${item.avatarPreference === 'youtube' ? 'avatar: youtube' : 'avatar: twitch'}</span>
+          </div>
+          <div class="media-source-links">
+            ${item.youtube ? `<a href="${item.youtube}" target="_blank" rel="noopener noreferrer">YouTube</a>` : '<span>Без YouTube</span>'}
+            ${item.twitch ? `<a href="${item.twitch}" target="_blank" rel="noopener noreferrer">Twitch</a>` : '<span>Без Twitch</span>'}
+          </div>
+          <div class="media-source-actions">
+            <button class="btn btn-secondary" type="button" data-edit-media="${index}">Редактировать</button>
+            <button class="btn btn-ghost" type="button" data-delete-media="${index}">Удалить</button>
+          </div>
+        </article>
+      `).join('');
+
+      mediaSourceList.querySelectorAll('[data-edit-media]').forEach(button => {
+        button.addEventListener('click', () => {
+          const item = mediaSources[Number(button.dataset.editMedia)];
+          if (!item) return;
+          mediaEditIndex.value = button.dataset.editMedia;
+          mediaName.value = item.name || '';
+          mediaDescription.value = item.description || '';
+          mediaYoutube.value = item.youtube || '';
+          mediaTwitch.value = item.twitch || '';
+          avatarPreference.value = item.avatarPreference || 'twitch';
+          document.getElementById('saveMediaBtn').textContent = 'Обновить участника';
+          window.scrollTo({ top: mediaSourceForm.offsetTop - 120, behavior: 'smooth' });
+        });
+      });
+
+      mediaSourceList.querySelectorAll('[data-delete-media]').forEach(button => {
+        button.addEventListener('click', () => {
+          const index = Number(button.dataset.deleteMedia);
+          mediaSources.splice(index, 1);
+          saveMediaSources();
+          renderMediaManager();
+          showNotification('Медиа-участник удалён');
+        });
+      });
+    }
+
     function checkSession() {
       const isAuthed = sessionStorage.getItem('admin_auth') === 'true';
       loginScreen.style.display = isAuthed ? 'none' : 'block';
       adminPanel.classList.toggle('show', isAuthed);
-      if (isAuthed) loadApplications();
+      if (isAuthed) {
+        loadApplications();
+        mediaSources = getStoredMediaSources();
+        renderMediaManager();
+      }
     }
 
     loginForm.addEventListener('submit', (event) => {
@@ -383,7 +594,64 @@
       showNotification('Заявка удалена');
     });
 
-    checkSession();
+    mediaSourceForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const payload = {
+        name: mediaName.value.trim(),
+        description: mediaDescription.value.trim(),
+        youtube: mediaYoutube.value.trim(),
+        twitch: mediaTwitch.value.trim(),
+        avatarPreference: avatarPreference.value || 'twitch'
+      };
+
+      if (!payload.name) {
+        showNotification('Укажи имя участника', true);
+        return;
+      }
+
+      if (!payload.youtube && !payload.twitch) {
+        showNotification('Добавь хотя бы одну ссылку: YouTube или Twitch', true);
+        return;
+      }
+
+      const editIndex = mediaEditIndex.value;
+      if (editIndex !== '') {
+        mediaSources[Number(editIndex)] = payload;
+        showNotification('Карточка медиа обновлена');
+      } else {
+        mediaSources.push(payload);
+        showNotification('Карточка медиа добавлена');
+      }
+
+      saveMediaSources();
+      renderMediaManager();
+      resetMediaForm();
+    });
+
+    clearMediaFormBtn.addEventListener('click', resetMediaForm);
+
+    exportMediaBtn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(JSON.stringify(mediaSources, null, 2));
+        showNotification('JSON медиа-источников скопирован в буфер');
+      } catch (_error) {
+        showNotification('Не удалось скопировать JSON', true);
+      }
+    });
+
+    resetMediaBtn.addEventListener('click', () => {
+      if (!confirm('Удалить локальные медиа-настройки и вернуться к media-sources.json?')) return;
+      localStorage.removeItem(MEDIA_SOURCES_KEY);
+      mediaSources = [...defaultMediaSources];
+      renderMediaManager();
+      resetMediaForm();
+      showNotification('Локальные медиа-настройки сброшены');
+    });
+
+    (async () => {
+      await loadDefaultMediaSources();
+      checkSession();
+    })();
   </script>
 </body>
 </html>
